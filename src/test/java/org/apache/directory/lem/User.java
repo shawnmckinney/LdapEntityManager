@@ -21,206 +21,207 @@ package org.apache.directory.lem;
 
 import java.io.Serializable;
 import java.util.List;
-import org.apache.directory.lem.Entity;
-
 
 /**
  *
  * @author smckinn
- * 
-*/
+ *
+ */
 public class User implements Entity, Serializable
 {
-    private static final long serialVersionUID = 1L;
-    private String key;    
-    private String filter;        
-    private String name;
-    private String full_name;
-    private String last_name;
-    private String first_name;
-    private String id;
-    private String group_id;
-    private String home;
-    private String login;
-    private String type;
-    private String password;    
-    private List<String> description;
-    private List<String> object_class;
-    private List<String> phones;
-    private List<String> emails;    
-    private List<String> addresses;        
-    
-    public String getKey() 
-    {
-        return key;
-    }
 
-    public void setKey(String key) 
-    {
-        this.key = key;
-    }
+	private static final long serialVersionUID = 1L;
+	private String key;
+	private String filter;
+	private String name;
+	private String full_name;
+	private String last_name;
+	private String first_name;
+	private String id;
+	private String group_id;
+	private String home;
+	private String login;
+	private String type;
+	private String password;
+	private List<String> description;
+	private List<String> object_class;
+	private List<String> phones;
+	private List<String> emails;
+	private List<String> addresses;
 
-    public String getFull_name() 
-    {
-        return full_name;
-    }
+	public String getKey()
+	{
+		return key;
+	}
 
-    public void setFull_name(String full_name) 
-    {
-        this.full_name = full_name;
-    }
+	public void setKey(String key)
+	{
+		this.key = key;
+	}
 
-    public String getLast_name() 
-    {
-        return last_name;
-    }
+	public String getFull_name()
+	{
+		return full_name;
+	}
 
-    public void setLast_name(String last_name) 
-    {
-        this.last_name = last_name;
-    }
+	public void setFull_name(String full_name)
+	{
+		this.full_name = full_name;
+	}
 
-    public String getFirst_name() 
-    {
-        return first_name;
-    }
+	public String getLast_name()
+	{
+		return last_name;
+	}
 
-    public void setFirst_name(String first_name) 
-    {
-        this.first_name = first_name;
-    }
+	public void setLast_name(String last_name)
+	{
+		this.last_name = last_name;
+	}
 
-    public String getId() 
-    {
-        return id;
-    }
+	public String getFirst_name()
+	{
+		return first_name;
+	}
 
-    public void setId(String id) 
-    {
-        this.id = id;
-    }
+	public void setFirst_name(String first_name)
+	{
+		this.first_name = first_name;
+	}
 
-    public String getGroup_id() 
-    {
-        return group_id;
-    }
+	public String getId()
+	{
+		return id;
+	}
 
-    public void setGroup_id(String group_id) 
-    {
-        this.group_id = group_id;
-    }
-    
-    public String getHome() 
-    {
-        return home;
-    }
+	public void setId(String id)
+	{
+		this.id = id;
+	}
 
-    public void setHome(String home) 
-    {
-        this.home = home;
-    }
+	public String getGroup_id()
+	{
+		return group_id;
+	}
 
-    public String getLogin() 
-    {
-        return login;
-    }
+	public void setGroup_id(String group_id)
+	{
+		this.group_id = group_id;
+	}
 
-    public void setLogin(String login) 
-    {
-        this.login = login;
-    }
+	public String getHome()
+	{
+		return home;
+	}
 
-    public String getType() 
-    {
-        return type;
-    }
+	public void setHome(String home)
+	{
+		this.home = home;
+	}
 
-    public void setType(String type) 
-    {
-        this.type = type;
-    }
+	public String getLogin()
+	{
+		return login;
+	}
 
-    public String getPassword() 
-    {
-        return password;
-    }
+	public void setLogin(String login)
+	{
+		this.login = login;
+	}
 
-    public void setPassword(String password) 
-    {
-        this.password = password;
-    }
-    
-    public List<String> getObject_class() 
-    {
-        return object_class;
-    }
+	public String getType()
+	{
+		return type;
+	}
 
-    public void setObject_class(List<String> object_class) 
-    {
-        this.object_class = object_class;
-    }
+	public void setType(String type)
+	{
+		this.type = type;
+	}
 
-    public List<String> getPhones() 
-    {
-        return phones;
-    }
+	public String getPassword()
+	{
+		return password;
+	}
 
-    public void setPhones(List<String> phones) 
-    {
-        this.phones = phones;
-    }
+	public void setPassword(String password)
+	{
+		this.password = password;
+	}
 
-    public List<String> getEmails() 
-    {
-        return emails;
-    }
+	public List<String> getObject_class()
+	{
+		return object_class;
+	}
 
-    public void setEmails(List<String> emails) 
-    {
-        this.emails = emails;
-    }
+	public void setObject_class(List<String> object_class)
+	{
+		this.object_class = object_class;
+	}
 
-    public String getName()
-    {
-        return name;
-    }
+	public List<String> getPhones()
+	{
+		return phones;
+	}
 
-    public void setName( String name )
-    {
-        this.name = name;
-    }
-    
-    public List<String> getDescription() 
-    {
-        return description;
-    }
+	public void setPhones(List<String> phones)
+	{
+		this.phones = phones;
+	}
 
-    public List<String> getAddresses() 
-    {
-        return addresses;
-    }
+	public List<String> getEmails()
+	{
+		return emails;
+	}
 
-    public void setAddresses(List<String> addresses) 
-    {
-        this.addresses = addresses;
-    }
+	public void setEmails(List<String> emails)
+	{
+		this.emails = emails;
+	}
 
-    public void setDescription(List<String> description) 
-    {
-        this.description = description;
-    }
-    
-    public String getFilter() {
-        return filter;
-    }
+	public String getName()
+	{
+		return name;
+	}
 
-    public void setFilter(String filter) {
-        this.filter = filter;
-    }
-    
-    @Override
-    public String toString() 
-    {
-        return "\nName: " + name + "\nDescription: " + description + "\nKey: " + key + "\nId: " + id + "\nOcs: " + object_class + "\nAddresses: " + addresses + "\n";        
-    }    
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public List<String> getDescription()
+	{
+		return description;
+	}
+
+	public List<String> getAddresses()
+	{
+		return addresses;
+	}
+
+	public void setAddresses(List<String> addresses)
+	{
+		this.addresses = addresses;
+	}
+
+	public void setDescription(List<String> description)
+	{
+		this.description = description;
+	}
+
+	public String getFilter()
+	{
+		return filter;
+	}
+
+	public void setFilter(String filter)
+	{
+		this.filter = filter;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "\nName: " + name + "\nDescription: " + description + "\nKey: " + key + "\nId: " + id + "\nOcs: " + object_class + "\nAddresses: " + addresses + "\n";
+	}
 }

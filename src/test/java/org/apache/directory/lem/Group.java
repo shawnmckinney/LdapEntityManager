@@ -24,78 +24,83 @@ import java.util.List;
 import org.apache.directory.lem.Entity;
 
 /**
- * 
+ *
  * @author smckinn
  */
 public class Group implements Entity, Serializable
 {
-    private static final long serialVersionUID = 1L;
-    private String name;
-    private String description;
-    private String key;
-    private String id;
-    private List<String> members;
-    private List<String> object_class;
 
-    public String getKey() 
-    {
-        return key;
-    }
+	private static final long serialVersionUID = 1L;
+	private String name;
+	private String description;
+	private String key;
+	private String id;
+	private List<String> members;
+	private List<String> object_class;
 
-    public void setKey(String key) 
-    {
-        this.key = key;
-    }
-    
-    public String getName()
-    {
-        return name;
-    }
+	public String getKey()
+	{
+		return key;
+	}
 
-    public void setName( String name )
-    {
-        this.name = name;
-    }
+	public void setKey(String key)
+	{
+		this.key = key;
+	}
 
-    public String getDescription()
-    {
-        return description;
-    }
+	public String getName()
+	{
+		return name;
+	}
 
-    public void setDescription( String description )
-    {
-        this.description = description;
-    }
+	public void setName(String name)
+	{
+		this.name = name;
+	}
 
-    public String getId() {
-        return id;
-    }
+	public String getDescription()
+	{
+		return description;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setDescription(String description)
+	{
+		this.description = description;
+	}
 
-    public List<String> getMembers()
-    {
-        return members;
-    }
+	public String getId()
+	{
+		return id;
+	}
 
-    public void setMembers( List<String> members )
-    {
-        this.members = members;
-    }
-    
-    public List<String> getObject_class() {
-        return object_class;
-    }
+	public void setId(String id)
+	{
+		this.id = id;
+	}
 
-    public void setObject_class(List<String> object_class) {
-        this.object_class = object_class;
-    }
+	public List<String> getMembers()
+	{
+		return members;
+	}
 
-    @Override
-    public String toString() 
-    {
-        return "\nName: " + name + "\nDescription: " + description + "\nKey: " + key + "\nId: " + id + "\nObject Classes: " + object_class + "\nMembers: " + members + "\n";        
-    }    
+	public void setMembers(List<String> members)
+	{
+		this.members = members;
+	}
+
+	public List<String> getObject_class()
+	{
+		return object_class;
+	}
+
+	public void setObject_class(List<String> object_class)
+	{
+		this.object_class = object_class;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "\nName: " + name + "\nDescription: " + description + "\nKey: " + key + "\nId: " + id + "\nObject Classes: " + object_class + "\nMembers: " + members + "\n";
+	}
 }

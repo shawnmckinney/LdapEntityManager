@@ -23,8 +23,10 @@ package org.apache.directory.lem;
  *
  * @author smckinn
  */
-public interface Entity 
+public interface Entity
 {
-    public String getKey();
-    public void setKey(String key);    
+
+	public String getKey();
+
+	public void setKey(String key);
 }
