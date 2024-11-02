@@ -67,7 +67,7 @@ public class EntityDao extends DaoBase
                 {
                     case "List":
                         LOG.info("LIST: {}", entity.get(inmodel));
-                        if ((List)entity.get( inmodel ) != null && model.get ( inentity ) != null )
+                        if ((List)entity.get( inentity ) != null && model.get ( inmodel ) != null )
                         {
                             List modelAttrs = (List)model.get(inmodel);
                             /* Rules for Attr lists:
@@ -100,15 +100,18 @@ public class EntityDao extends DaoBase
                         String modelAttrName = (String)model.get(inmodel);
                         String entityAttrValue = (String)entity.get( inentity );                        
                         LOG.debug("String ATTR NM: {}, VALUE: {}", modelAttrName, entityAttrValue);
-                        if ( name.compareToIgnoreCase("rdn") == 0 )
+                        if ( entityAttrValue != null )
                         {
-                            nodeDn = modelAttrName + "=" + entityAttrValue + "," + Config.getString( type );
-                            myEntry.setDn( nodeDn );
-                            LOG.debug("NODE DN: {}", nodeDn );
-                        }
-                        else
-                        {
-                            myEntry.add(modelAttrName, entityAttrValue);                            
+                            if ( name.compareToIgnoreCase("rdn") == 0 )
+                            {
+                                nodeDn = modelAttrName + "=" + entityAttrValue + "," + Config.getString( type );
+                                myEntry.setDn( nodeDn );
+                                LOG.debug("NODE DN: {}", nodeDn );
+                            }
+                            else
+                            {
+                                myEntry.add(modelAttrName, entityAttrValue);                            
+                            }                            
                         }
                         break;
                 }
