@@ -1,5 +1,7 @@
 package org.apache.directory.lem;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +20,10 @@ public class TestUsers
         UserMgr gMgr = new UserMgrImpl();
         User user = new User();
         user.setName( "Foo2");
-        user.setDescription( "Fighters" );
+        List lst = new ArrayList();
+        lst.add("Foo Fighters");
+        user.setDescription( lst );
+        
         
         try
         {

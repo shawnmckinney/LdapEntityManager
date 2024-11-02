@@ -57,10 +57,7 @@ public class UserDao extends DaoBase
             myEntry.add( SchemaConstants.CN_AT, user.getName() );
             myEntry.add( SchemaConstants.SN_AT, user.getName() );
             myEntry.add( SchemaConstants.UID_AT, user.getName() );            
-            if ( StringUtils.isNotEmpty( user.getDescription() ) )
-            {
-                myEntry.add( SchemaConstants.DESCRIPTION_AT, user.getDescription() );
-            }
+            loadAttrs( user.getDescription(), myEntry, SchemaConstants.DESCRIPTION_AT );
 
             LOG.debug("users USER_OBJ_CLASS: [{}], CN: [{}]",
                     USER_OBJECT_CLASS_IMPL,
@@ -137,7 +134,8 @@ public class UserDao extends DaoBase
     {
         User entity = new User();
         entity.setName( getAttribute( le, SchemaConstants.CN_AT ) );
-        entity.setDescription( getAttribute( le, SchemaConstants.DESCRIPTION_AT ) );
+        entity.setDescription( getAttributes( le, SchemaConstants.DESCRIPTION_AT ) );
+        //entity.setDescription( getAttribute( le, SchemaConstants.DESCRIPTION_AT ) );
         return entity;
     }
 

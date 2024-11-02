@@ -19,16 +19,62 @@
  */
 package org.apache.directory.lem;
 
+import java.util.List;
+
 
 /**
  *
  * @author smckinn
- */
+ * 
+# YAML (model)
+name: uid
+rdn: uid
+full_name: cn
+last_name: sn
+first_name: givenname
+id: uidNumber
+group_id: gidNumber
+home: homeDirectory  
+login: loginShell
+type: employeeType    
+description: 
+  - description
+object_class: 
+  - objectClass
+addresses:
+  - postalAddress
+  - l
+  - postalCode  
+phones:
+  - telephonenumber
+emails:
+  - mail
+*/
 public class User 
 {
     private static final long serialVersionUID = 1L;
     private String name;
-    private String description;
+    private String rdn;
+    private String full_name;
+    private String last_name;
+    private String first_name;
+    private String id;
+    private String group_id;
+    private String home;
+    private String login;
+    private String type;
+    private List<String> description;
+    private List<String> object_class;
+    private List<String> address;
+    private List<String> phones;
+    private List<String> emails;    
+    private List<String> addresses;        
+    
+    @Override
+    public String toString() 
+    {
+        return "\nName: " + name + "\nDescription: " + description + "\nRdn: " + rdn + "\nId: " + id + "\nOcs: " + object_class + "\nAddress: " + address + "\n";        
+    }    
 
     public User( )
     {
@@ -39,10 +85,133 @@ public class User
         this.name = name;
     }
 
-    public User( String name, String description )
+    public String getRdn() 
     {
-        this.name = name;
-        this.description = description;
+        return rdn;
+    }
+
+    public void setRdn(String rdn) 
+    {
+        this.rdn = rdn;
+    }
+
+    public String getFull_name() 
+    {
+        return full_name;
+    }
+
+    public void setFull_name(String full_name) 
+    {
+        this.full_name = full_name;
+    }
+
+    public String getLast_name() 
+    {
+        return last_name;
+    }
+
+    public void setLast_name(String last_name) 
+    {
+        this.last_name = last_name;
+    }
+
+    public String getFirst_name() 
+    {
+        return first_name;
+    }
+
+    public void setFirst_name(String first_name) 
+    {
+        this.first_name = first_name;
+    }
+
+    public String getId() 
+    {
+        return id;
+    }
+
+    public void setId(String id) 
+    {
+        this.id = id;
+    }
+
+    public String getGroup_id() 
+    {
+        return group_id;
+    }
+
+    public void setGroup_id(String group_id) 
+    {
+        this.group_id = group_id;
+    }
+    
+    public String getHome() 
+    {
+        return home;
+    }
+
+    public void setHome(String home) 
+    {
+        this.home = home;
+    }
+
+    public String getLogin() 
+    {
+        return login;
+    }
+
+    public void setLogin(String login) 
+    {
+        this.login = login;
+    }
+
+    public String getType() 
+    {
+        return type;
+    }
+
+    public void setType(String type) 
+    {
+        this.type = type;
+    }
+    public List<String> getAddress() 
+    {
+        return address;
+    }
+
+    public List<String> getObject_class() 
+    {
+        return object_class;
+    }
+
+    public void setObject_class(List<String> object_class) 
+    {
+        this.object_class = object_class;
+    }
+
+    public void setAddress(List<String> address) 
+    {
+        this.address = address;
+    }
+
+    public List<String> getPhones() 
+    {
+        return phones;
+    }
+
+    public void setPhones(List<String> phones) 
+    {
+        this.phones = phones;
+    }
+
+    public List<String> getEmails() 
+    {
+        return emails;
+    }
+
+    public void setEmails(List<String> emails) 
+    {
+        this.emails = emails;
     }
 
     public String getName()
@@ -54,13 +223,23 @@ public class User
     {
         this.name = name;
     }
-
-    public String getDescription()
+    
+    public List<String> getDescription() 
     {
         return description;
     }
 
-    public void setDescription( String description )
+    public List<String> getAddresses() 
+    {
+        return addresses;
+    }
+
+    public void setAddresses(List<String> addresses) 
+    {
+        this.addresses = addresses;
+    }
+
+    public void setDescription(List<String> description) 
     {
         this.description = description;
     }
