@@ -1,0 +1,29 @@
+# inetorgperson:
+name: foo29
+rdn: foo29
+full_name: foo29 fighters
+last_name: fighters
+first_name: foo29
+#policy: none
+description: 
+  - Foo Fighters FTW!
+object_class:
+  - inetorgperson
+  - posixaccount
+#  - rockstars
+addresses:
+  - Suite 2112$157 Riverside Ave
+  - Pasedena
+  - 77777
+phones: 
+  - 555-333-3333
+  - 867-5309
+emails:
+  - foo29@fighters.com
+  - foo.fighters@gmail.com
+#posixaccount:
+id: 1234567
+group_id: 7654321
+home: /home/foo29
+login: bash
+type: rockstar    
