@@ -3,6 +3,7 @@ rdn: uid
 full_name: cn
 last_name: sn
 first_name: givenname
+password: userPassword
 id: uidNumber
 group_id: gidNumber
 home: homeDirectory  

@@ -43,13 +43,49 @@ public class EntityTest
         LOG.info("[{}] Test Yaml",CLS_NM );
         
         EntityTest t = new EntityTest();
-        t.process();
+        t.processGroup();
+        t.processUser();
+    }
+    
+    private void processGroup()
+    {
+        // Loading the YAML groups from the /resources folder
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        File model = new File(classLoader.getResource("groups.yml").getFile());
+        File data = new File(classLoader.getResource("groups-d1.yml").getFile());
+        EntityDao eDao = new EntityDao();
+
+        // Instantiating a new ObjectMapper as a YAMLFactory
+        ObjectMapper om = new ObjectMapper(new YAMLFactory());
+        try
+        {
+            // Mapping the employee from the YAML groups to the Employee class
+            Group inModel = om.readValue(model, Group.class);
+            Group inData = om.readValue(data, Group.class);            
+
+            // Printing out the information
+            LOG.info("Users info [{}]", inModel.toString());
+
+            // Access the first element of the list and print it as well
+            LOG.info("Accessing first element: [{}]", inModel.getObject_class().get(0));        
+            
+            eDao.create( inModel, inData );
+            LOG.info("Successful Test");
+        }
+        catch ( java.io.IOException e )
+        {
+            LOG.error( CLS_NM, e );
+        }        
+        catch ( LemException e )
+        {
+            LOG.error( CLS_NM, e );
+        }        
     }
     
     /**
      * WIP
      */
-    private void process()
+    private void processUser()
     {
         // Loading the YAML groups from the /resources folder
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();

@@ -63,6 +63,7 @@ public class User
     private String home;
     private String login;
     private String type;
+    private String password;    
     private List<String> description;
     private List<String> object_class;
     private List<String> address;
@@ -174,6 +175,17 @@ public class User
     {
         this.type = type;
     }
+
+    public String getPassword() 
+    {
+        return password;
+    }
+
+    public void setPassword(String password) 
+    {
+        this.password = password;
+    }
+    
     public List<String> getAddress() 
     {
         return address;

@@ -1,9 +1,10 @@
 # inetorgperson:
-name: foo29
-rdn: foo29
-full_name: foo29 fighters
+name: foo30
+rdn: foo30
+full_name: foo30 fighters
 last_name: fighters
-first_name: foo29
+first_name: foo30
+password: secret
 #policy: none
 description: 
   - Foo Fighters FTW!
