@@ -1,0 +1,8 @@
+name: cn
+description: description
+members:
+  - member
+rdn: cn
+id: gidNumber    
+object_class:
+  - objectClass
