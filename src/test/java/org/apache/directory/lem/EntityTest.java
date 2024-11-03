@@ -73,7 +73,7 @@ public class EntityTest
             
             //inspect( inModel.getClass(), inModel );
             
-            eDao.create( inModel, inData, Ids.USERS );
+            eDao.create( inModel, inData );
             LOG.info("Successful Test");
         }
         catch ( java.io.IOException e )

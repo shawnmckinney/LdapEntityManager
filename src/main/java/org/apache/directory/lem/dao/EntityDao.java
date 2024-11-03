@@ -45,17 +45,16 @@ public class EntityDao extends DaoBase
      * It uses two objects: the entity's name is pulled from "model", the values from the "entity".
      * @param inmodel The mappings between the logical and physical data model.
      * @param inentity The data to be loaded into the directory. It's formatted using the logical structure.
-     * @param type is bound to the users and groups container coordinates in config.properties.
      * @throws LemException 
      */
-    public void create( Object inmodel, Object inentity, String type ) throws LemException
+    public void create( Object inmodel, Object inentity ) throws LemException
     {
         LdapConnection ld = null;
         Field[] fields = inentity.getClass().getDeclaredFields();
         String nodeDn = null;
         try 
         {      
-            Entry myEntry = new DefaultEntry( );
+            Entry ldapEntry = new DefaultEntry( );
             for ( Field entity : fields ) 
             {
                 entity.setAccessible(true);
@@ -89,7 +88,7 @@ public class EntityDao extends DaoBase
                                     modelAttrName = (String)modelAttrs.get(0);
                                 }
                                 LOG.debug("LIST ATTR NM: {}, VALUE: {}", modelAttrName, entityAttrValue);
-                                myEntry.add(modelAttrName, entityAttrValue.toString());
+                                ldapEntry.add(modelAttrName, entityAttrValue.toString());
                                 i++;
                             }   
                         }
@@ -104,20 +103,20 @@ public class EntityDao extends DaoBase
                         {
                             if ( name.compareToIgnoreCase("rdn") == 0 )
                             {
-                                nodeDn = modelAttrName + "=" + entityAttrValue + "," + Config.getString( type );
-                                myEntry.setDn( nodeDn );
+                                nodeDn = modelAttrName + "=" + entityAttrValue + "," + Config.getString( inentity.getClass().getTypeName() );
+                                ldapEntry.setDn( nodeDn );
                                 LOG.debug("NODE DN: {}", nodeDn );
                             }
                             else
                             {
-                                myEntry.add(modelAttrName, entityAttrValue);                            
+                                ldapEntry.add(modelAttrName, entityAttrValue);                            
                             }                            
                         }
                         break;
                 }
             }
             ld = getConnection();
-            add( ld, myEntry );
+            add(ld, ldapEntry );
         }
         catch (IllegalArgumentException | IllegalAccessException ex) 
         {
