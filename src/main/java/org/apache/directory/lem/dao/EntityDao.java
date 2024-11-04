@@ -20,6 +20,7 @@
 package org.apache.directory.lem.dao;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.logging.Level;
 import org.apache.directory.api.ldap.model.entry.DefaultEntry;
@@ -78,7 +79,7 @@ public class EntityDao extends DaoBase
                             for ( var entityAttrValue : (List)entity.get ( inentity ))                                   
                             {    
                                 LOG.debug("LIST: {}, ENTITY VALUE: {}, NM {}", entity.get(inmodel), model.get ( inentity ), entityAttrValue );
-                                String modelAttrName = null;
+                                String modelAttrName;
                                 if( modelAttrs.size() > 1 )
                                 {
                                     modelAttrName = (String)modelAttrs.get(i);
@@ -140,4 +141,31 @@ public class EntityDao extends DaoBase
             closeConnection( ld );
         }
     }        
+    
+    private <T> void inspect(Class<T> klazz, Object object) 
+    {
+        Field[] fields = klazz.getDeclaredFields();
+        System.out.printf("%d fields:%n", fields.length);
+        for (Field field : fields) 
+        {
+            field.setAccessible(true);
+            try 
+            {
+                LOG.info("{} {} {} {}",
+                        Modifier.toString(field.getModifiers()),
+                        field.getType().getSimpleName(),
+                        field.getName(),
+                        field.get(object)
+                );
+            } 
+            catch (IllegalArgumentException ex) 
+            {
+                java.util.logging.Logger.getLogger(TestYaml.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+            catch (IllegalAccessException ex) 
+            {
+                java.util.logging.Logger.getLogger(TestYaml.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }    
 }

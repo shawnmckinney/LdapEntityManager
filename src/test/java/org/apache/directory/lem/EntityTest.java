@@ -19,13 +19,9 @@
  */
 package org.apache.directory.lem;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.logging.Level;
-import org.apache.directory.lem.dao.EntityDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,112 +36,23 @@ public class EntityTest
 
     public static void main(String[] args) 
     {
-        LOG.info("[{}] Test Yaml",CLS_NM );
-        
+        LOG.info("{} Entity Test", CLS_NM );        
         EntityTest t = new EntityTest();
-        t.processGroup();
-        t.processUser();
+        t.addEntity( "groups.yml", "groups-d1.yml", "org.apache.directory.lem.Group" );
+        t.addEntity( "users.yml", "users-d1.yml", "org.apache.directory.lem.User" );
     }
     
-    private void processGroup()
+    private void addEntity( String modelFile, String dataFile, String className )
     {
-        // Loading the YAML groups from the /resources folder
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        File model = new File(classLoader.getResource("groups.yml").getFile());
-        File data = new File(classLoader.getResource("groups-d1.yml").getFile());
-        EntityDao eDao = new EntityDao();
-
-        // Instantiating a new ObjectMapper as a YAMLFactory
-        ObjectMapper om = new ObjectMapper(new YAMLFactory());
+        EntityMgr eMgr = new EntityMgrImpl();
         try
         {
-            // Mapping the employee from the YAML groups to the Employee class
-            Group inModel = om.readValue(model, Group.class);
-            Group inData = om.readValue(data, Group.class);            
-
-            // Printing out the information
-            LOG.info("Users info [{}]", inModel.toString());
-
-            // Access the first element of the list and print it as well
-            LOG.info("Accessing first element: [{}]", inModel.getObject_class().get(0));        
-            
-            eDao.create( inModel, inData );
+            eMgr.add( modelFile, dataFile, className );
             LOG.info("Successful Test");
         }
-        catch ( java.io.IOException e )
-        {
-            LOG.error( CLS_NM, e );
-        }        
         catch ( LemException e )
         {
             LOG.error( CLS_NM, e );
         }        
-    }
-    
-    /**
-     * WIP
-     */
-    private void processUser()
-    {
-        // Loading the YAML groups from the /resources folder
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        File model = new File(classLoader.getResource("users.yml").getFile());
-        File data = new File(classLoader.getResource("users-d1.yml").getFile());
-        EntityDao eDao = new EntityDao();
-
-        // Instantiating a new ObjectMapper as a YAMLFactory
-        ObjectMapper om = new ObjectMapper(new YAMLFactory());
-        try
-        {
-            // Mapping the employee from the YAML groups to the Employee class
-            User inModel = om.readValue(model, User.class);
-            User inData = om.readValue(data, User.class);            
-
-            // Printing out the information
-            LOG.info("Users info [{}]", inModel.toString());
-
-            // Access the first element of the list and print it as well
-            LOG.info("Accessing first element: [{}]", inModel.getObject_class().get(0));        
-            
-            //inspect( inModel.getClass(), inModel );
-            
-            eDao.create( inModel, inData );
-            LOG.info("Successful Test");
-        }
-        catch ( java.io.IOException e )
-        {
-            LOG.error( CLS_NM, e );
-        }        
-        catch ( LemException e )
-        {
-            LOG.error( CLS_NM, e );
-        }        
-    }
-    
-    private <T> void inspect(Class<T> klazz, Object object) 
-    {
-        Field[] fields = klazz.getDeclaredFields();
-        System.out.printf("%d fields:%n", fields.length);
-        for (Field field : fields) 
-        {
-            field.setAccessible(true);
-            try 
-            {
-                LOG.info("{} {} {} {}",
-                        Modifier.toString(field.getModifiers()),
-                        field.getType().getSimpleName(),
-                        field.getName(),
-                        field.get(object)
-                );
-            } 
-            catch (IllegalArgumentException ex) 
-            {
-                java.util.logging.Logger.getLogger(TestYaml.class.getName()).log(Level.SEVERE, null, ex);
-            } 
-            catch (IllegalAccessException ex) 
-            {
-                java.util.logging.Logger.getLogger(TestYaml.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
     }    
 }

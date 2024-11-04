@@ -19,6 +19,8 @@
  */
 package org.apache.directory.lem.dao;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,6 +28,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PushbackInputStream;
 import java.net.URL;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.directory.lem.LemException;
 
 /**
  *
@@ -157,5 +161,55 @@ public class ResourceUtil
             }
         }
         return result;
+    }
+
+    
+    public static Object unmarshal( String fileNm, String className ) throws LemException
+    {        
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        File fileIn = new File(classLoader.getResource( fileNm ).getFile());
+        ObjectMapper om = new ObjectMapper(new YAMLFactory());
+        Object outObj = null;
+        try
+        {
+            outObj = om.readValue(fileIn, ResourceUtil.createInstance( className ).getClass());
+        }
+        catch ( java.io.IOException e )
+        {
+            throw new LemException ( e.getMessage() );
+        }        
+        return outObj;
+    }
+    
+    public static Object createInstance( String className ) throws LemException
+    {
+        Object target;
+
+        try
+        {
+            if ( StringUtils.isEmpty( className ) )
+            {
+                String error = "createInstance() null or empty classname";
+                throw new LemException( error );
+            }
+            target = Class.forName( className ).newInstance();
+        }
+        catch ( ClassNotFoundException e )
+        {
+            String error = "createInstance() className [" + className + "] caught java.lang.ClassNotFoundException="
+                + e;
+                throw new LemException( error );
+        }
+        catch ( InstantiationException e )
+        {
+            String error = "createInstance()  [" + className + "] caught java.lang.InstantiationException=" + e;
+                throw new LemException( error );
+        }
+        catch ( IllegalAccessException e )
+        {
+            String error = "createInstance()  [" + className + "] caught java.lang.IllegalAccessException=" + e;
+                throw new LemException( error );
+        }
+        return target;
     }    
 }
