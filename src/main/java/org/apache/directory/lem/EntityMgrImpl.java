@@ -44,19 +44,7 @@ public class EntityMgrImpl implements EntityMgr
      */    
     public void add( String modelFile, String dataFile, String className ) throws LemException
     {
-        try
-        {
-            EntryDao eDao = new EntryDao();            
-            Object inModel = ResourceUtil.unmarshal( modelFile, className );
-            Object inData = ResourceUtil.unmarshal( dataFile, className );
-            MultiValuedMap map = EntityMapper.loadMap( inModel, inData );
-            eDao.create(map);
-            LOG.info("Successful Test");
-        }
-        catch ( LemException e )
-        {
-            LOG.error( CLS_NM, e );
-        }        
+        add( ResourceUtil.unmarshal( modelFile, className ), ResourceUtil.unmarshal( dataFile, className ) );
     }    
 
     public void add( Object model, Object data ) throws LemException
@@ -64,7 +52,7 @@ public class EntityMgrImpl implements EntityMgr
         try
         {
             EntryDao eDao = new EntryDao();            
-            MultiValuedMap map = EntityMapper.loadMap( inModel, inData );            
+            MultiValuedMap map = EntityMapper.loadMap( model, data );            
             eDao.create(map);
             LOG.info("Successful Test");
         }

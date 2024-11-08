@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.logging.Level;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
-import org.apache.directory.lem.dao.EntityDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -116,15 +115,15 @@ public class EntityMapper
         }
         catch (IllegalArgumentException | IllegalAccessException ex) 
         {
-            java.util.logging.Logger.getLogger(EntityDao.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CLS_NM).log(Level.SEVERE, null, ex);
         } 
         catch (NoSuchFieldException ex) 
         {
-            java.util.logging.Logger.getLogger(EntityDao.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CLS_NM).log(Level.SEVERE, null, ex);
         } 
         catch (SecurityException ex) 
         {
-            java.util.logging.Logger.getLogger(EntityDao.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CLS_NM).log(Level.SEVERE, null, ex);
         }
         return map;
     }  
