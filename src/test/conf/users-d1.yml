@@ -1,9 +1,9 @@
 # inetorgperson:
-name: foo30
-rdn: foo30
-full_name: foo30 fighters
+name: foo32
+rdn: foo32
+full_name: foo32 fighters
 last_name: fighters
-first_name: foo30
+first_name: foo32
 password: secret
 #policy: none
 description: 

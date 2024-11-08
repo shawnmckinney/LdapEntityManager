@@ -20,7 +20,8 @@
 package org.apache.directory.lem;
 
 import java.util.List;
-import org.apache.directory.lem.dao.EntityDao;
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.directory.lem.dao.EntryDao;
 import org.apache.directory.lem.dao.ResourceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,15 +35,37 @@ public class EntityMgrImpl implements EntityMgr
     private static final String CLS_NM = EntityMgrImpl.class.getName();
     private static final Logger LOG = LoggerFactory.getLogger( CLS_NM );
     
+    /**
+     * WIP
+     * @param modelFile
+     * @param dataFile
+     * @param className
+     * @throws LemException 
+     */    
     public void add( String modelFile, String dataFile, String className ) throws LemException
     {
-        EntityDao eDao = new EntityDao();
         try
         {
+            EntryDao eDao = new EntryDao();            
             Object inModel = ResourceUtil.unmarshal( modelFile, className );
             Object inData = ResourceUtil.unmarshal( dataFile, className );
-            LOG.info("Entity info [{}]", inModel.toString());
-            eDao.create( inModel, inData );
+            MultiValuedMap map = EntityMapper.loadMap( inModel, inData );
+            eDao.create(map);
+            LOG.info("Successful Test");
+        }
+        catch ( LemException e )
+        {
+            LOG.error( CLS_NM, e );
+        }        
+    }    
+
+    public void add( Object model, Object data ) throws LemException
+    {
+        try
+        {
+            EntryDao eDao = new EntryDao();            
+            MultiValuedMap map = EntityMapper.loadMap( inModel, inData );            
+            eDao.create(map);
             LOG.info("Successful Test");
         }
         catch ( LemException e )
@@ -50,6 +73,26 @@ public class EntityMgrImpl implements EntityMgr
             LOG.error( CLS_NM, e );
         }        
     }
+            
+    public void update( Object model, Object data ) throws LemException
+    {
+        throw new java.lang.UnsupportedOperationException();
+    }
+            
+    public void delete( Object model, Object data ) throws LemException
+    {
+        throw new java.lang.UnsupportedOperationException();
+    }
+            
+    public Object read( Object model, Object data ) throws LemException
+    {
+        throw new java.lang.UnsupportedOperationException();
+    }
+    
+    public List<Object> find( Object model, Object data ) throws LemException
+    {
+        throw new java.lang.UnsupportedOperationException();
+    }    
     
     public void update( String modelFile, String dataFile, String className ) throws LemException
     {
@@ -69,5 +112,5 @@ public class EntityMgrImpl implements EntityMgr
     public List<Object> find( String modelFile, String dataFile, String className ) throws LemException
     {
         throw new java.lang.UnsupportedOperationException();
-    }            
+    }
 }

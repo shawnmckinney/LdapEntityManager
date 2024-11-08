@@ -32,4 +32,9 @@ public interface EntityMgr
     void delete( String modelFile, String dataFile, String className ) throws LemException;
     Object read( String modelFile, String dataFile, String className ) throws LemException;
     List<Object> find( String modelFile, String dataFile, String className ) throws LemException;    
+    void add( Object model, Object data ) throws LemException;
+    void update( Object model, Object data ) throws LemException;
+    void delete( Object model, Object data ) throws LemException;
+    Object read( Object model, Object data ) throws LemException;
+    List<Object> find( Object model, Object data ) throws LemException;    
 }

@@ -19,8 +19,8 @@
  */
 package org.apache.directory.lem.dao;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.directory.api.ldap.model.entry.DefaultEntry;
 import org.apache.directory.api.ldap.model.entry.Entry;
 import org.apache.directory.api.ldap.model.exception.LdapException;
@@ -38,25 +38,27 @@ public class EntryDao extends DaoBase
     private static final String CLS_NM = EntryDao.class.getName();
     private static final Logger LOG = LoggerFactory.getLogger( CLS_NM );   
     
-    public void create( HashMap <String, String>entryMap ) throws LemException
+    public void create( MultiValuedMap <String, List>entryMap ) throws LemException
     {
         LdapConnection ld = null;
         String nodeDn = null;
         Entry entry = new DefaultEntry();
         try
         {
-            for (Map.Entry<String,String> record : entryMap.entrySet())
+            for (String key : entryMap.keySet())
             {
-                LOG.debug( "key [{}], value: [{}]", record.getKey(), record.getValue() );
-                if (record.getKey().equalsIgnoreCase("DN"))
+                LOG.debug( "key [{}], value: [{}]", key, entryMap.get( key ) );
+                List<String> vals = (List)entryMap.get( key );
+                for ( String value : vals )
                 {
-                    nodeDn = record.getValue();
-                    entry.setDn(nodeDn);
-                    LOG.debug( "create rdn [{}]", nodeDn );                    
-                }
-                else
-                {
-                    entry.add( record.getKey(), record.getValue());
+                    if( key.toString().equalsIgnoreCase("DN"))
+                    {
+                        entry.setDn( value );
+                    }
+                    else
+                    {
+                        entry.add( key.toString(), value );                        
+                    }
                 }
             }            
             ld = getConnection();
@@ -73,4 +75,5 @@ public class EntryDao extends DaoBase
             closeConnection( ld );
         }
     }    
+    
 }

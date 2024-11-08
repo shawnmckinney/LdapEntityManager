@@ -19,9 +19,6 @@
  */
 package org.apache.directory.lem;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

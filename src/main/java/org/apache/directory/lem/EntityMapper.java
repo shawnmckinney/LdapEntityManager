@@ -17,18 +17,15 @@
  *   under the License.
  *
  */
-package org.apache.directory.lem.dao;
+package org.apache.directory.lem;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.logging.Level;
-import org.apache.directory.api.ldap.model.entry.DefaultEntry;
-import org.apache.directory.api.ldap.model.entry.Entry;
-import org.apache.directory.api.ldap.model.exception.LdapException;
-import org.apache.directory.ldap.client.api.LdapConnection;
-import org.apache.directory.lem.Config;
-import org.apache.directory.lem.LemException;
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
+import org.apache.directory.lem.dao.EntityDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,26 +33,24 @@ import org.slf4j.LoggerFactory;
  *
  * @author smckinn
  */
-public class EntityDao extends DaoBase
+public class EntityMapper 
 {
-    private static final String CLS_NM = EntityDao.class.getName();
+    private static final String CLS_NM = EntityMapper.class.getName();
     private static final Logger LOG = LoggerFactory.getLogger( CLS_NM );   
-    
+
     /**
-     * This routine uses Java Reflection to iterate over an object's fields and convert into physical LDAP.
+     * This routine uses Java Reflection to iterate over an object's fields and convert into LDAP attributes.
      * It uses two objects: the entity's name is pulled from "model", the values from the "entity".
      * @param inmodel The mappings between the logical and physical data model.
      * @param inentity The data to be loaded into the directory. It's formatted using the logical structure.
      * @throws LemException 
      */
-    public void create( Object inmodel, Object inentity ) throws LemException
+    public static MultiValuedMap loadMap ( Object inmodel, Object inentity ) throws LemException
     {
-        LdapConnection ld = null;
         Field[] fields = inentity.getClass().getDeclaredFields();
-        String nodeDn = null;
+        MultiValuedMap map = new ArrayListValuedHashMap();
         try 
         {      
-            Entry ldapEntry = new DefaultEntry( );
             for ( Field entity : fields ) 
             {
                 entity.setAccessible(true);
@@ -65,7 +60,8 @@ public class EntityDao extends DaoBase
                 model.setAccessible( true );
                 switch ( entity.getType().getSimpleName() )
                 {
-                    case "List":
+                    case "List" -> 
+                    {
                         LOG.info("LIST: {}", entity.get(inmodel));
                         if ((List)entity.get( inentity ) != null && model.get ( inmodel ) != null )
                         {
@@ -73,29 +69,30 @@ public class EntityDao extends DaoBase
                             /* Rules for Attr lists:
                             1. If model's attr has one value (type), it's a multival ldap attr, e.g. emails
                             2024-10-31 19:47:020 INFO  EntityDao:82 - LIST AAR: [objectClass], ENTITY VALUE: [inetorgperson, posixaccount]
-                            2. If model's attr list > 1, it's a collection of single value attrs, e.g. addresses LIST: [ postalAddress, l, postalCode ]  
+                            2. If model's attr list > 1, it's a collection of single value attrs, e.g. addresses LIST: [ postalAddress, l, postalCode ]
                             */                                                    
                             int i = 0;
-                            for ( var entityAttrValue : (List)entity.get ( inentity ))                                   
+                            for ( var entityAttrValue : (List)entity.get ( inentity ))
                             {    
                                 LOG.debug("LIST: {}, ENTITY VALUE: {}, NM {}", entity.get(inmodel), model.get ( inentity ), entityAttrValue );
                                 String modelAttrName;
                                 if( modelAttrs.size() > 1 )
                                 {
                                     modelAttrName = (String)modelAttrs.get(i);
+                                    map.put( modelAttrName, entityAttrValue.toString() );
                                 }
                                 else
                                 {
                                     modelAttrName = (String)modelAttrs.get(0);
+                                    map.put( modelAttrName, entityAttrValue.toString() );
                                 }
                                 LOG.debug("LIST ATTR NM: {}, VALUE: {}", modelAttrName, entityAttrValue);
-                                ldapEntry.add(modelAttrName, entityAttrValue.toString());
                                 i++;
                             }   
                         }
-                        break;
-
-                    case "String":
+                    }
+                    case "String" -> 
+                    {
                         entity.setAccessible( true );
                         String modelAttrName = (String)model.get(inmodel);
                         String entityAttrValue = (String)entity.get( inentity );                        
@@ -104,20 +101,18 @@ public class EntityDao extends DaoBase
                         {
                             if ( name.compareToIgnoreCase("rdn") == 0 )
                             {
-                                nodeDn = modelAttrName + "=" + entityAttrValue + "," + Config.getString( inentity.getClass().getTypeName() );
-                                ldapEntry.setDn( nodeDn );
+                                String nodeDn = modelAttrName + "=" + entityAttrValue + "," + Config.getString( inentity.getClass().getTypeName() );
                                 LOG.debug("NODE DN: {}", nodeDn );
+                                map.put( "dn", nodeDn );                                
                             }
                             else
                             {
-                                ldapEntry.add(modelAttrName, entityAttrValue);                            
+                                map.put( modelAttrName, entityAttrValue );
                             }                            
                         }
-                        break;
+                    }
                 }
             }
-            ld = getConnection();
-            add(ld, ldapEntry );
         }
         catch (IllegalArgumentException | IllegalAccessException ex) 
         {
@@ -131,16 +126,8 @@ public class EntityDao extends DaoBase
         {
             java.util.logging.Logger.getLogger(EntityDao.class.getName()).log(Level.SEVERE, null, ex);
         }
-        catch ( LdapException e )
-        {
-            String error = "create user node dn [" + nodeDn + "] caught LDAPException=" + e;
-            throw new LemException( error, e );
-        }        
-        finally
-        {
-            closeConnection( ld );
-        }
-    }        
+        return map;
+    }  
     
     private <T> void inspect(Class<T> klazz, Object object) 
     {
@@ -160,11 +147,11 @@ public class EntityDao extends DaoBase
             } 
             catch (IllegalArgumentException ex) 
             {
-                java.util.logging.Logger.getLogger(TestYaml.class.getName()).log(Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(CLS_NM).log(Level.SEVERE, null, ex);
             } 
             catch (IllegalAccessException ex) 
             {
-                java.util.logging.Logger.getLogger(TestYaml.class.getName()).log(Level.SEVERE, null, ex);
+                java.util.logging.Logger.getLogger(CLS_NM).log(Level.SEVERE, null, ex);
             }
         }
     }    
