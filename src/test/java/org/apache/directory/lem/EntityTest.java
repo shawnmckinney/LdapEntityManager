@@ -35,7 +35,9 @@ public class EntityTest
     {
         LOG.info("{} Entity Test", CLS_NM );        
         EntityTest t = new EntityTest();
+        t.deleteEntity( "groups.yml", "groups-d1.yml", "org.apache.directory.lem.Group" );
         t.addEntity( "groups.yml", "groups-d1.yml", "org.apache.directory.lem.Group" );
+        t.deleteEntity( "users.yml", "users-d1.yml", "org.apache.directory.lem.User" );        
         t.addEntity( "users.yml", "users-d1.yml", "org.apache.directory.lem.User" );
     }
     
@@ -45,7 +47,21 @@ public class EntityTest
         try
         {
             eMgr.add( modelFile, dataFile, className );
-            LOG.info("Successful Test");
+            LOG.info("Successful Test Add");
+        }
+        catch ( LemException e )
+        {
+            LOG.error( CLS_NM, e );
+        }        
+    }    
+    
+    private void deleteEntity( String modelFile, String dataFile, String className )
+    {
+        EntityMgr eMgr = new EntityMgrImpl();
+        try
+        {
+            eMgr.delete( modelFile, dataFile, className );
+            LOG.info("Successful Test Delete");
         }
         catch ( LemException e )
         {

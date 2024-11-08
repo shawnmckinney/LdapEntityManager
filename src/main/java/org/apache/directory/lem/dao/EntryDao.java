@@ -75,5 +75,32 @@ public class EntryDao extends DaoBase
             closeConnection( ld );
         }
     }    
-    
+
+    /**
+     * 
+     * @param entryMap
+     * @throws LemException 
+     */    
+    public void remove( MultiValuedMap <String, List>entryMap ) throws LemException
+    {
+        LdapConnection ld = null;
+        String dn = null;
+        try
+        {
+            List<String> vals = (List)entryMap.get( "dn" );
+            dn = vals.get(0);
+            ld = getConnection();
+            ld.delete( dn );
+            LOG.debug( "removed dn [{}]", dn );
+        }
+        catch ( LdapException e )
+        {
+            String error = "remove node dn [" + dn + "] caught LDAPException=" + e;
+            throw new LemException( error, e );
+        }
+        finally
+        {
+            closeConnection( ld );
+        }
+    }    
 }

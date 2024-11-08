@@ -69,7 +69,16 @@ public class EntityMgrImpl implements EntityMgr
             
     public void delete( Object model, Object data ) throws LemException
     {
-        throw new java.lang.UnsupportedOperationException();
+        try
+        {
+            EntryDao eDao = new EntryDao();            
+            MultiValuedMap map = EntityMapper.loadMap( model, data );            
+            eDao.remove(map);
+        }
+        catch ( LemException e )
+        {
+            LOG.error( CLS_NM, e );
+        }        
     }
             
     public Object read( Object model, Object data ) throws LemException
@@ -89,7 +98,7 @@ public class EntityMgrImpl implements EntityMgr
             
     public void delete( String modelFile, String dataFile, String className ) throws LemException
     {
-        throw new java.lang.UnsupportedOperationException();
+        delete( ResourceUtil.unmarshal( modelFile, className ), ResourceUtil.unmarshal( dataFile, className ) );        
     }
             
     public Object read( String modelFile, String dataFile, String className ) throws LemException
