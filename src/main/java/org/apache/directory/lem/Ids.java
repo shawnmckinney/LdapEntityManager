@@ -32,15 +32,7 @@ public class Ids
     public static final String BINDPW = "bindpw";
     public static final String HOST = "host";
     public static final String PORT = "port";
-    public static final String USERS = "users";
-    public static final String GROUPS = "groups";
-    public static final String USERS_OBJECT_CLASS = "users.object.class";
-    public static final String GROUPS_OBJECT_CLASS = "groups.object.class";
-    public static final String MEMBER_ATR = "member.attr";
     public static final String TLS_CACERT = "cacert";
-    public static final String GROUPS_DYN_OBJ = "group.dynamic.obj";
-    public static final String GROUPS_DYN_ATTR = "group.dynamic.atr.name";
-    public static final String GROUPS_DYN_URI = "group.dynamic.atr.uri";
     public static final String TRUST_STORE_PW = "trust.store.pw";
     public static final String TRUST_STORE = "trust.store";
     public static final String TRUST_STORE_ON_CLASSPATH = "trust.store.classpath";
