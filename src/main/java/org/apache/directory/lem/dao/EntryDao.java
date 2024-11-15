@@ -102,10 +102,13 @@ public class EntryDao extends DaoBase
             else
             {
                 List at = getAttributes( le, key );
-                for( Object var : at )
+                if ( at != null )
                 {
-                    String val = var.toString();
-                    map.put(key, val );
+                    for( Object var : at )
+                    {
+                        String val = var.toString();
+                        map.put(key, val );
+                    }                    
                 }
             }
         }        
