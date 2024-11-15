@@ -81,9 +81,29 @@ public class EntityMgrImpl implements EntityMgr
         }        
     }
             
+    public Object read( String modelFile, String dataFile, String className ) throws LemException
+    {
+        return read( ResourceUtil.unmarshal( modelFile, className ), ResourceUtil.unmarshal( dataFile, className ) );
+    }
+            
     public Object read( Object model, Object data ) throws LemException
     {
-        throw new java.lang.UnsupportedOperationException();
+        MultiValuedMap outMap = null;
+        Object outEntity = null;
+        try
+        {
+            EntryDao eDao = new EntryDao();            
+            MultiValuedMap map = EntityMapper.loadMap2( model, data );            
+            outMap = eDao.get(map);
+            outEntity = EntityMapper.unloadMap(model, data, outMap);
+            LOG.debug("finished");
+            
+        }
+        catch ( LemException e )
+        {
+            LOG.error( CLS_NM, e );
+        }        
+        return outEntity;        
     }
     
     public List<Object> find( Object model, Object data ) throws LemException
@@ -99,11 +119,6 @@ public class EntityMgrImpl implements EntityMgr
     public void delete( String modelFile, String dataFile, String className ) throws LemException
     {
         delete( ResourceUtil.unmarshal( modelFile, className ), ResourceUtil.unmarshal( dataFile, className ) );        
-    }
-            
-    public Object read( String modelFile, String dataFile, String className ) throws LemException
-    {
-        throw new java.lang.UnsupportedOperationException();
     }
             
     public List<Object> find( String modelFile, String dataFile, String className ) throws LemException

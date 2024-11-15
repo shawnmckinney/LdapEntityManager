@@ -35,11 +35,39 @@ public class EntityTest
     {
         LOG.info("{} Entity Test", CLS_NM );        
         EntityTest t = new EntityTest();
+        t.readEntity( "users.yml", "users-r1.yml", "org.apache.directory.lem.User" );        
+
         t.deleteEntity( "groups.yml", "groups-d1.yml", "org.apache.directory.lem.Group" );
         t.addEntity( "groups.yml", "groups-d1.yml", "org.apache.directory.lem.Group" );
+        t.readEntity( "groups.yml", "groups-d1.yml", "org.apache.directory.lem.Group" );
         t.deleteEntity( "users.yml", "users-d1.yml", "org.apache.directory.lem.User" );        
         t.addEntity( "users.yml", "users-d1.yml", "org.apache.directory.lem.User" );
+        t.readEntity( "users.yml", "users-d1.yml", "org.apache.directory.lem.User" );        
+
+        
     }
+    
+    private void readEntity( String modelFile, String dataFile, String className )
+    {
+        EntityMgr eMgr = new EntityMgrImpl();
+        try
+        {
+            Object obj = eMgr.read(modelFile, dataFile, className );
+            if ( obj != null )
+            {
+                LOG.info("Successful Test Read [{}]", obj.toString());
+            }
+            else
+            {
+                LOG.info("readEntity failed");
+            }
+            
+        }
+        catch ( LemException e )
+        {
+            LOG.error( CLS_NM, e );
+        }        
+    }    
     
     private void addEntity( String modelFile, String dataFile, String className )
     {

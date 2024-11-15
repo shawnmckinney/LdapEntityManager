@@ -273,7 +273,6 @@ abstract class DaoBase
         return attrValues;
     }
 
-
     /**
      * Method wraps ldap client to return multivalued attribute by name within a given entry and returns
      * as a set of strings.

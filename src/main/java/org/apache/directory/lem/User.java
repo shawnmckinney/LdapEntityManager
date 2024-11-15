@@ -66,7 +66,6 @@ public class User
     private String password;    
     private List<String> description;
     private List<String> object_class;
-    private List<String> address;
     private List<String> phones;
     private List<String> emails;    
     private List<String> addresses;        
@@ -74,7 +73,7 @@ public class User
     @Override
     public String toString() 
     {
-        return "\nName: " + name + "\nDescription: " + description + "\nRdn: " + rdn + "\nId: " + id + "\nOcs: " + object_class + "\nAddress: " + address + "\n";        
+        return "\nName: " + name + "\nDescription: " + description + "\nRdn: " + rdn + "\nId: " + id + "\nOcs: " + object_class + "\nAddresses: " + addresses + "\n";        
     }    
 
     public User( )
@@ -186,11 +185,6 @@ public class User
         this.password = password;
     }
     
-    public List<String> getAddress() 
-    {
-        return address;
-    }
-
     public List<String> getObject_class() 
     {
         return object_class;
@@ -199,11 +193,6 @@ public class User
     public void setObject_class(List<String> object_class) 
     {
         this.object_class = object_class;
-    }
-
-    public void setAddress(List<String> address) 
-    {
-        this.address = address;
     }
 
     public List<String> getPhones() 
