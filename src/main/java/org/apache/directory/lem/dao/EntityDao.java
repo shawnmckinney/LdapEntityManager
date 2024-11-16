@@ -52,7 +52,7 @@ public class EntityDao extends DaoBase
             List<String> attrs = new ArrayList<String>();
             for (String key : entryMap.keySet())
             {
-                LOG.debug( "key [{}], value: [{}]", key, entryMap.get( key ) );
+                //LOG.debug( "key [{}], value: [{}]", key, entryMap.get( key ) );
                 List<String> vals = (List)entryMap.get( key );                
                 // TODO: use * on attrs?
                 for ( String value : vals )
@@ -66,10 +66,9 @@ public class EntityDao extends DaoBase
                         attrs.add( key );
                     }
                 }                
-            }
-            
-            ld = getConnection();
+            }           
             String[] atrs = attrs.toArray(new String[0]);
+            ld = getConnection();            
             entry = read( ld, nodeDn, atrs );
             //entry = read( ld, nodeDn, new String[]{"*"} );
             out = unloadLdapEntry( entry, entryMap );
@@ -105,8 +104,7 @@ public class EntityDao extends DaoBase
                 {
                     for( Object var : at )
                     {
-                        String val = var.toString();
-                        map.put(key, val );
+                        map.put(key, var.toString() );
                     }                    
                 }
             }
