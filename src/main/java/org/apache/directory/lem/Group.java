@@ -36,21 +36,6 @@ public class Group implements Entity, Serializable
     private List<String> members;
     private List<String> object_class;
 
-    public Group( )
-    {
-    }
-
-    public Group( String name )
-    {
-        this.name = name;
-    }
-
-    public Group( String name, String description )
-    {
-        this.name = name;
-        this.description = description;
-    }
-
     public String getKey() 
     {
         return key;
@@ -80,16 +65,6 @@ public class Group implements Entity, Serializable
     {
         this.description = description;
     }
-
-    /*
-    public String getRdn() {
-        return rdn;
-    }
-
-    public void setRdn(String rdn) {
-        this.rdn = rdn;
-    }
-*/
 
     public String getId() {
         return id;

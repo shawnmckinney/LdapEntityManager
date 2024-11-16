@@ -73,40 +73,12 @@ public class EntityTest
             LOG.error( CLS_NM, e );
         }        
     }    
-    /*
-first_name: foo32
-password: secret
-#policy: none
-description: 
-  - Foo Fighters FTW!
-object_class:
-  - inetorgperson
-  - posixaccount
-#  - rockstars
-addresses:
-  - Suite 2112$157 Riverside Ave
-  - Pasedena
-  - 77777
-phones: 
-  - 555-333-3333
-  - 867-5309
-emails:
-  - foo29@fighters.com
-  - foo.fighters@gmail.com
-#posixaccount:
-id: 1234567
-group_id: 7654321
-home: /home/foo29
-login: bash
-type: rockstar    
     
-    */
     private void addUsers( String modelFile, String dataFile, String className )
     {
         EntityMgr eMgr = new EntityMgrImpl();
         try
         {
-            //add( ResourceUtil.unmarshal( modelFile, className ), ResourceUtil.unmarshal( dataFile, className ) );
             User model = (User)ResourceUtil.unmarshal( modelFile, className );
             User entity = (User)ResourceUtil.unmarshal( dataFile, className );
             List<String> addresses = new ArrayList<String>();

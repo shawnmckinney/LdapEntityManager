@@ -27,29 +27,6 @@ import java.util.List;
  *
  * @author smckinn
  * 
-# YAML (model)
-name: uid
-rdn: uid
-full_name: cn
-last_name: sn
-first_name: givenname
-id: uidNumber
-group_id: gidNumber
-home: homeDirectory  
-login: loginShell
-type: employeeType    
-description: 
-  - description
-object_class: 
-  - objectClass
-addresses:
-  - postalAddress
-  - l
-  - postalCode  
-phones:
-  - telephonenumber
-emails:
-  - mail
 */
 public class User implements Entity, Serializable
 {
@@ -71,21 +48,6 @@ public class User implements Entity, Serializable
     private List<String> emails;    
     private List<String> addresses;        
     
-    @Override
-    public String toString() 
-    {
-        return "\nName: " + name + "\nDescription: " + description + "\nKey: " + key + "\nId: " + id + "\nOcs: " + object_class + "\nAddresses: " + addresses + "\n";        
-    }    
-
-    public User( )
-    {
-    }
-
-    public User( String name )
-    {
-        this.name = name;
-    }
-
     public String getKey() 
     {
         return key;
@@ -245,4 +207,10 @@ public class User implements Entity, Serializable
     {
         this.description = description;
     }
+    
+    @Override
+    public String toString() 
+    {
+        return "\nName: " + name + "\nDescription: " + description + "\nKey: " + key + "\nId: " + id + "\nOcs: " + object_class + "\nAddresses: " + addresses + "\n";        
+    }    
 }
