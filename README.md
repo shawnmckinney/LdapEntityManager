@@ -1,1 +1,1 @@
-# LdapEntryManager
+# LdapEntityManager
