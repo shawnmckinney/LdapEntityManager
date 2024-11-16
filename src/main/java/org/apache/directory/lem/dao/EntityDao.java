@@ -36,9 +36,9 @@ import org.slf4j.LoggerFactory;
  *
  * @author smckinn
  */
-public class EntryDao extends DaoBase
+public class EntityDao extends DaoBase
 {
-    private static final String CLS_NM = EntryDao.class.getName();
+    private static final String CLS_NM = EntityDao.class.getName();
     private static final Logger LOG = LoggerFactory.getLogger( CLS_NM );   
     
     public MultiValuedMap get( MultiValuedMap <String, List>entryMap ) throws LemException

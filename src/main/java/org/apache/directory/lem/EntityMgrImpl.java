@@ -21,7 +21,7 @@ package org.apache.directory.lem;
 
 import java.util.List;
 import org.apache.commons.collections4.MultiValuedMap;
-import org.apache.directory.lem.dao.EntryDao;
+import org.apache.directory.lem.dao.EntityDao;
 import org.apache.directory.lem.dao.ResourceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +51,7 @@ public class EntityMgrImpl implements EntityMgr
     {
         try
         {
-            EntryDao eDao = new EntryDao();            
+            EntityDao eDao = new EntityDao();            
             MultiValuedMap map = EntityMapper.loadMap( model, data );            
             eDao.create(map);
             LOG.info("Successful Test");
@@ -71,7 +71,7 @@ public class EntityMgrImpl implements EntityMgr
     {
         try
         {
-            EntryDao eDao = new EntryDao();            
+            EntityDao eDao = new EntityDao();            
             MultiValuedMap map = EntityMapper.loadMap( model, data );            
             eDao.remove(map);
         }
@@ -92,7 +92,7 @@ public class EntityMgrImpl implements EntityMgr
         Entity outEntity = null;
         try
         {
-            EntryDao eDao = new EntryDao();            
+            EntityDao eDao = new EntityDao();            
             MultiValuedMap map = EntityMapper.loadMap2( model, data );            
             outMap = eDao.get(map);
             outEntity = EntityMapper.unloadMap(model, data, outMap);
