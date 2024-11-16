@@ -54,7 +54,7 @@ import org.apache.directory.ldap.client.api.LdapConnection;
  *
  * @author smckinn
  */
-abstract class DaoBase
+abstract class BaseDao
 {
     private static final PasswordPolicyRequest PP_REQ_CTRL = new PasswordPolicyRequestImpl();
     

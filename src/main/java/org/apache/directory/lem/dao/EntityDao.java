@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author smckinn
  */
-public class EntityDao extends DaoBase
+public class EntityDao extends BaseDao
 {
     private static final String CLS_NM = EntityDao.class.getName();
     private static final Logger LOG = LoggerFactory.getLogger( CLS_NM );   
@@ -54,7 +54,6 @@ public class EntityDao extends DaoBase
             {
                 //LOG.debug( "key [{}], value: [{}]", key, entryMap.get( key ) );
                 List<String> vals = (List)entryMap.get( key );                
-                // TODO: use * on attrs?
                 for ( String value : vals )
                 {
                     if( key.toString().equalsIgnoreCase("DN"))
@@ -72,7 +71,6 @@ public class EntityDao extends DaoBase
             entry = read( ld, nodeDn, atrs );
             //entry = read( ld, nodeDn, new String[]{"*"} );
             out = unloadLdapEntry( entry, entryMap );
-            LOG.debug( "read dn [{}]", nodeDn );
         }
         catch ( LdapException e )
         {
@@ -83,6 +81,8 @@ public class EntityDao extends DaoBase
         {
             closeConnection( ld );
         }
+        
+        LOG.debug( "read dn [{}]", nodeDn );        
         return out;
     }    
 
