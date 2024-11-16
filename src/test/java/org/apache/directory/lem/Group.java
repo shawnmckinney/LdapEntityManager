@@ -21,6 +21,7 @@ package org.apache.directory.lem;
 
 import java.io.Serializable;
 import java.util.List;
+import org.apache.directory.lem.Entity;
 
 /**
  * 
