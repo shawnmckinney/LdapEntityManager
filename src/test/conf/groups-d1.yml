@@ -1,3 +1,4 @@
+key: foo3
 name: foo3
 description: foo
 members:
@@ -5,7 +6,6 @@ members:
   - uid=foo27,ou=People,dc=example,dc=com
   - uid=foo28,ou=People,dc=example,dc=com
   - uid=foo29,ou=People,dc=example,dc=com
-rdn: foo3
 id: 987654321    
 object_class:
   - groupofmembers

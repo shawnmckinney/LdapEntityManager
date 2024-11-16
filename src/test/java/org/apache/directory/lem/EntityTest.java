@@ -19,6 +19,9 @@
  */
 package org.apache.directory.lem;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.directory.lem.dao.ResourceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,14 +38,16 @@ public class EntityTest
     {
         LOG.info("{} Entity Test", CLS_NM );        
         EntityTest t = new EntityTest();
-        t.readEntity( "users.yml", "users-r1.yml", "org.apache.directory.lem.User" );        
 
+        t.readEntity( "users.yml", "users-r1.yml", "org.apache.directory.lem.User" );        
         t.deleteEntity( "groups.yml", "groups-d1.yml", "org.apache.directory.lem.Group" );
         t.addEntity( "groups.yml", "groups-d1.yml", "org.apache.directory.lem.Group" );
         t.readEntity( "groups.yml", "groups-d1.yml", "org.apache.directory.lem.Group" );
         t.deleteEntity( "users.yml", "users-d1.yml", "org.apache.directory.lem.User" );        
         t.addEntity( "users.yml", "users-d1.yml", "org.apache.directory.lem.User" );
         t.readEntity( "users.yml", "users-d1.yml", "org.apache.directory.lem.User" );        
+        
+        //t.addUsers( "users.yml", "users-r1.yml", "org.apache.directory.lem.User" );
 
         
     }
@@ -62,6 +67,88 @@ public class EntityTest
                 LOG.info("readEntity failed");
             }
             
+        }
+        catch ( LemException e )
+        {
+            LOG.error( CLS_NM, e );
+        }        
+    }    
+    /*
+first_name: foo32
+password: secret
+#policy: none
+description: 
+  - Foo Fighters FTW!
+object_class:
+  - inetorgperson
+  - posixaccount
+#  - rockstars
+addresses:
+  - Suite 2112$157 Riverside Ave
+  - Pasedena
+  - 77777
+phones: 
+  - 555-333-3333
+  - 867-5309
+emails:
+  - foo29@fighters.com
+  - foo.fighters@gmail.com
+#posixaccount:
+id: 1234567
+group_id: 7654321
+home: /home/foo29
+login: bash
+type: rockstar    
+    
+    */
+    private void addUsers( String modelFile, String dataFile, String className )
+    {
+        EntityMgr eMgr = new EntityMgrImpl();
+        try
+        {
+            //add( ResourceUtil.unmarshal( modelFile, className ), ResourceUtil.unmarshal( dataFile, className ) );
+            User model = (User)ResourceUtil.unmarshal( modelFile, className );
+            User entity = (User)ResourceUtil.unmarshal( dataFile, className );
+            List<String> addresses = new ArrayList<String>();
+            addresses.add("Suite 1234$444 1st St.");
+            addresses.add("San Juan");
+            addresses.add("PR");            
+            List<String> emails = new ArrayList<String>();
+            emails.add(entity.getKey() + "@gmail.com");
+            emails.add(entity.getKey() + "@apache.org");            
+            List<String> phones = new ArrayList<String>();
+            phones.add("555-555-5555");
+            phones.add("123-45-6789");            
+            List<String> ocs = new ArrayList<String>();
+            ocs.add("inetorgperson");
+            ocs.add("posixaccount");   
+            String name = entity.getKey();
+            for( int i = 0; i < 10; i++ )
+            {
+                entity.setKey(name + i);
+                entity.setName(entity.getKey() );
+                entity.setFirst_name(entity.getKey());
+                entity.setFull_name( entity.getFirst_name() + " " + entity.getLast_name());
+                entity.setLast_name("Fighters");
+                entity.setAddresses(addresses);
+                entity.setEmails(emails);
+                entity.setPhones(phones);
+                entity.setId("1000" + i);
+                entity.setObject_class(ocs);
+                entity.setGroup_id("2000" + i);
+                entity.setHome("/home/" + entity.getKey() + i);
+                entity.setLogin("bash");
+                entity.setType("test");
+                List<String> desc = new ArrayList<String>();
+                desc.add(entity.getKey() + i + " desc" );                
+                entity.setDescription(desc);
+                entity.setPassword("secret");
+                
+                //entity
+                //entity.setRdn("foo1000");
+                eMgr.add( model, entity );                
+            }
+            LOG.info("Successful Test Add Enities");
         }
         catch ( LemException e )
         {

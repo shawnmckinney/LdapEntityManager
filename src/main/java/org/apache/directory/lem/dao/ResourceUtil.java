@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.io.PushbackInputStream;
 import java.net.URL;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.directory.lem.Entity;
 import org.apache.directory.lem.LemException;
 
 /**
@@ -164,15 +165,15 @@ public class ResourceUtil
     }
 
     
-    public static Object unmarshal( String fileNm, String className ) throws LemException
+    public static Entity unmarshal( String fileNm, String className ) throws LemException
     {        
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         File fileIn = new File(classLoader.getResource( fileNm ).getFile());
         ObjectMapper om = new ObjectMapper(new YAMLFactory());
-        Object outObj = null;
+        Entity outObj = null;
         try
         {
-            outObj = om.readValue(fileIn, ResourceUtil.createInstance( className ).getClass());
+            outObj = (Entity)om.readValue(fileIn, ResourceUtil.createInstance( className ).getClass());
         }
         catch ( java.io.IOException e )
         {

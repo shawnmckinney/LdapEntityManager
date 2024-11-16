@@ -20,7 +20,6 @@
 package org.apache.directory.lem.dao;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;

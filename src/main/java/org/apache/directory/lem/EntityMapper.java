@@ -39,7 +39,7 @@ public class EntityMapper
     private static final String CLS_NM = EntityMapper.class.getName();
     private static final Logger LOG = LoggerFactory.getLogger( CLS_NM );   
 
-    public static Object unloadMap ( Object inmodel, Object inentity, MultiValuedMap map ) throws LemException
+    public static Entity unloadMap ( Entity inmodel, Entity inentity, MultiValuedMap map ) throws LemException
     {
         Field[] fields = inentity.getClass().getDeclaredFields();
         try 
@@ -109,7 +109,7 @@ public class EntityMapper
         return inentity;
     }  
     
-    public static MultiValuedMap loadMap2 ( Object inmodel, Object inentity ) throws LemException
+    public static MultiValuedMap loadMap2 ( Entity inmodel, Entity inentity ) throws LemException
     {
         Field[] fields = inentity.getClass().getDeclaredFields();
         MultiValuedMap map = new ArrayListValuedHashMap();
@@ -165,7 +165,8 @@ public class EntityMapper
                         LOG.debug("String ATTR NM: {}, VALUE: {}", modelAttrName, entityAttrValue);
                         if ( entityAttrValue != null )
                         {
-                            if ( name.compareToIgnoreCase("rdn") == 0 )
+                            //if ( name.compareToIgnoreCase("rdn") == 0 )
+                            if ( name.compareToIgnoreCase("key") == 0 )
                             {
                                 String nodeDn = modelAttrName + "=" + entityAttrValue + "," + Config.getString( inentity.getClass().getTypeName() );
                                 LOG.debug("NODE DN: {}", nodeDn );
@@ -198,7 +199,7 @@ public class EntityMapper
      * @param inentity The data to be loaded into the directory. It's formatted using the logical structure.
      * @throws LemException 
      */
-    public static MultiValuedMap loadMap ( Object inmodel, Object inentity ) throws LemException
+    public static MultiValuedMap loadMap ( Entity inmodel, Entity inentity ) throws LemException
     {
         Field[] fields = inentity.getClass().getDeclaredFields();
         MultiValuedMap map = new ArrayListValuedHashMap();
@@ -253,7 +254,8 @@ public class EntityMapper
                         LOG.debug("String ATTR NM: {}, VALUE: {}", modelAttrName, entityAttrValue);
                         if ( entityAttrValue != null )
                         {
-                            if ( name.compareToIgnoreCase("rdn") == 0 )
+                            //if ( name.compareToIgnoreCase("rdn") == 0 )
+                            if ( name.compareToIgnoreCase("key") == 0 )
                             {
                                 String nodeDn = modelAttrName + "=" + entityAttrValue + "," + Config.getString( inentity.getClass().getTypeName() );
                                 LOG.debug("NODE DN: {}", nodeDn );

@@ -26,12 +26,12 @@ import java.util.List;
  * 
  * @author smckinn
  */
-public class Group implements Serializable
+public class Group implements Entity, Serializable
 {
     private static final long serialVersionUID = 1L;
     private String name;
     private String description;
-    private String rdn;
+    private String key;
     private String id;
     private List<String> members;
     private List<String> object_class;
@@ -51,6 +51,16 @@ public class Group implements Serializable
         this.description = description;
     }
 
+    public String getKey() 
+    {
+        return key;
+    }
+
+    public void setKey(String key) 
+    {
+        this.key = key;
+    }
+    
     public String getName()
     {
         return name;
@@ -71,6 +81,7 @@ public class Group implements Serializable
         this.description = description;
     }
 
+    /*
     public String getRdn() {
         return rdn;
     }
@@ -78,6 +89,7 @@ public class Group implements Serializable
     public void setRdn(String rdn) {
         this.rdn = rdn;
     }
+*/
 
     public String getId() {
         return id;
@@ -108,6 +120,6 @@ public class Group implements Serializable
     @Override
     public String toString() 
     {
-        return "\nName: " + name + "\nDescription: " + description + "\nRdn: " + rdn + "\nId: " + id + "\nObject Classes: " + object_class + "\nMembers: " + members + "\n";        
+        return "\nName: " + name + "\nDescription: " + description + "\nKey: " + key + "\nId: " + id + "\nObject Classes: " + object_class + "\nMembers: " + members + "\n";        
     }    
 }

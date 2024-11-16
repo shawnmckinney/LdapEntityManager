@@ -19,6 +19,7 @@
  */
 package org.apache.directory.lem;
 
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -50,11 +51,11 @@ phones:
 emails:
   - mail
 */
-public class User 
+public class User implements Entity, Serializable
 {
     private static final long serialVersionUID = 1L;
+    private String key;    
     private String name;
-    private String rdn;
     private String full_name;
     private String last_name;
     private String first_name;
@@ -73,7 +74,7 @@ public class User
     @Override
     public String toString() 
     {
-        return "\nName: " + name + "\nDescription: " + description + "\nRdn: " + rdn + "\nId: " + id + "\nOcs: " + object_class + "\nAddresses: " + addresses + "\n";        
+        return "\nName: " + name + "\nDescription: " + description + "\nKey: " + key + "\nId: " + id + "\nOcs: " + object_class + "\nAddresses: " + addresses + "\n";        
     }    
 
     public User( )
@@ -85,14 +86,14 @@ public class User
         this.name = name;
     }
 
-    public String getRdn() 
+    public String getKey() 
     {
-        return rdn;
+        return key;
     }
 
-    public void setRdn(String rdn) 
+    public void setKey(String key) 
     {
-        this.rdn = rdn;
+        this.key = key;
     }
 
     public String getFull_name() 

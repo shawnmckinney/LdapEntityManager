@@ -47,7 +47,7 @@ public class EntityMgrImpl implements EntityMgr
         add( ResourceUtil.unmarshal( modelFile, className ), ResourceUtil.unmarshal( dataFile, className ) );
     }    
 
-    public void add( Object model, Object data ) throws LemException
+    public void add( Entity model, Entity data ) throws LemException
     {
         try
         {
@@ -62,12 +62,12 @@ public class EntityMgrImpl implements EntityMgr
         }        
     }
             
-    public void update( Object model, Object data ) throws LemException
+    public void update( Entity model, Entity data ) throws LemException
     {
         throw new java.lang.UnsupportedOperationException();
     }
             
-    public void delete( Object model, Object data ) throws LemException
+    public void delete( Entity model, Entity data ) throws LemException
     {
         try
         {
@@ -81,15 +81,15 @@ public class EntityMgrImpl implements EntityMgr
         }        
     }
             
-    public Object read( String modelFile, String dataFile, String className ) throws LemException
+    public Entity read( String modelFile, String dataFile, String className ) throws LemException
     {
         return read( ResourceUtil.unmarshal( modelFile, className ), ResourceUtil.unmarshal( dataFile, className ) );
     }
             
-    public Object read( Object model, Object data ) throws LemException
+    public Entity read( Entity model, Entity data ) throws LemException
     {
         MultiValuedMap outMap = null;
-        Object outEntity = null;
+        Entity outEntity = null;
         try
         {
             EntryDao eDao = new EntryDao();            
@@ -106,7 +106,7 @@ public class EntityMgrImpl implements EntityMgr
         return outEntity;        
     }
     
-    public List<Object> find( Object model, Object data ) throws LemException
+    public List<Entity> find( Entity model, Entity data ) throws LemException
     {
         throw new java.lang.UnsupportedOperationException();
     }    
@@ -121,7 +121,7 @@ public class EntityMgrImpl implements EntityMgr
         delete( ResourceUtil.unmarshal( modelFile, className ), ResourceUtil.unmarshal( dataFile, className ) );        
     }
             
-    public List<Object> find( String modelFile, String dataFile, String className ) throws LemException
+    public List<Entity> find( String modelFile, String dataFile, String className ) throws LemException
     {
         throw new java.lang.UnsupportedOperationException();
     }
