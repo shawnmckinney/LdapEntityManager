@@ -54,7 +54,6 @@ public class EntityMgrImpl implements EntityMgr
             EntityDao eDao = new EntityDao();            
             MultiValuedMap map = EntityMapper.loadMap( model, data );            
             eDao.create(map);
-            LOG.info("Successful Test");
         }
         catch ( LemException e )
         {
