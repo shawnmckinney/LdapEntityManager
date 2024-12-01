@@ -77,6 +77,11 @@ login: bash
 type: rockstar    
 ```
 
+### Sample User Objects
+
+- Users will need to implement their data model by defining Objects (samples under src/test/org/apache/directory/lem) and corresponding YAML model and data artifacts (e.g. /src/test/conf)
+- LDAP bindings are contained in (src/test/conf) config.properties file.
+
 ### DUMPTY APIs
 
 ```
