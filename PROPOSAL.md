@@ -39,7 +39,8 @@ emails:
   - mail
 ```
 
-The left side repesents logical and right side is physical. Above we have mappings to both inetorgperson and posix account attrs.
+- The left side represents logical and right side is physical. Above we have mappings to both inetorgperson and posix account attrs.
+- Lists are declared using YAML syntax rules. Single element lists declared in the model will map to multival attributes. Lists > 1 will be composed of mulitiple attrs.
 
 ### Sample User Entity
 
