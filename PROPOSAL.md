@@ -7,11 +7,11 @@ API uses YAML files to map between logical and physical data formats.
 
 ## Rationale
 
-Work with apps like [SCIMPLE](https://directory.apache.org/scimple/) providing a flexible API layer to work with a variety of user data mapping req's. 
+Work with apps like [SCIMPLE](https://directory.apache.org/scimple/) providing a stable API layer to work with a variety of user data mapping req's. 
 
 e.g.
 
-### User Model
+### Sample User Model
 
 ```
 key: uid
@@ -39,8 +39,9 @@ emails:
   - mail
 ```
 
-- The left side represents logical and right side is physical. Above we have mappings to both inetorgperson and posix account attrs.
-- Lists are declared using YAML syntax rules. Single element lists declared in the model will map to multival attributes. Lists > 1 will be composed of mulitiple attrs.
+- The left side represents logical and right side is physical names of the attributes.
+- The sample above maps to both inetorgperson and posix account attrs.
+- Lists are declared with YAML syntax rules. Single element lists declared in the model will map to multival attrs. Lists > 1 will be composed of mulitiple attrs.
 
 ### Sample User Entity
 
@@ -77,9 +78,28 @@ login: bash
 type: rockstar    
 ```
 
+- The left side contains the logical attr names and the right side has the values.
+- The object_class attr may be loaded with multiple values (e.g. inetorgperson, posixaccount).
+- Lists composed of multiple attrs are a special case and must follow special mapping rule.
+e.g. model: 
+```
+addresses:
+  - postalAddress
+  - l
+  - postalCode
+```
+
+data listed in same order:
+```
+addresses:
+  - Suite 2112$157 Riverside Ave
+  - Pasedena
+  - 77777
+```
+
 ### Sample User Objects
 
-- Users will need to implement their data model by defining Objects (samples under src/test/org/apache/directory/lem) and corresponding YAML model and data artifacts (e.g. /src/test/conf)
+- Users implement their data model by defining Objects (samples under src/test/org/apache/directory/lem) and the corresponding YAML model and data artifacts (e.g. /src/test/conf)
 - LDAP bindings are contained in (src/test/conf) config.properties file.
 
 ### DUMPTY APIs
