@@ -40,14 +40,12 @@ emails:
 ```
 
 - The left side represents logical and right side is physical names of the attributes.
-- The sample above maps to both inetorgperson and posix account attrs.
-- Lists are declared with YAML syntax rules. Single element lists declared in the model will map to multival attrs. Lists > 1 will be composed of mulitiple attrs.
+- Lists are declared with YAML syntax rules. Single element lists declared in the model will map to multival attrs. Lists > 1 will be composed of multiple attrs.
 
 ### Sample User Entity
 
 ```
 key: foo
-# inetorgperson:  
 name: foo
 full_name: foo fighters
 last_name: fighters
@@ -70,7 +68,6 @@ phones:
 emails:
   - foo29@fighters.com
   - foo.fighters@gmail.com
-#posixaccount:
 id: 1234567
 group_id: 7654321
 home: /home/foo29
@@ -78,9 +75,9 @@ login: bash
 type: rockstar    
 ```
 
-- The left side contains the logical attr names and the right side has the values.
-- The object_class attr may be loaded with multiple values (e.g. inetorgperson, posixaccount).
-- Lists composed of multiple attrs are a special case and must follow special mapping rule.
+- The left side contains the logical attr name and the right side has the value.
+- The object_class attr may be loaded with multiple values.
+- Lists composed of multiple attrs are a special case and must follow mapping rule.
 e.g. model: 
 ```
 addresses:
@@ -89,7 +86,7 @@ addresses:
   - postalCode
 ```
 
-data listed in same order:
+Data values must be listed in the same order:
 ```
 addresses:
   - Suite 2112$157 Riverside Ave
@@ -99,7 +96,7 @@ addresses:
 
 ### Sample User Objects
 
-- Users implement their data model by defining Objects (samples under src/test/org/apache/directory/lem) and the corresponding YAML model and data artifacts (e.g. /src/test/conf)
+- Users will implement their data model by defining entity classes (samples under src/test/org/apache/directory/lem) and the corresponding YAML model and data artifacts (e.g. /src/test/conf)
 - LDAP bindings are contained in (src/test/conf) config.properties file.
 
 ### DUMPTY APIs
@@ -108,17 +105,17 @@ addresses:
 public interface EntityMgr 
 {
     // Pass file names to the model and entity:
-    void add( String modelFile, String dataFile, String className ) throws LemException;
-    void update( String modelFile, String dataFile, String className ) throws LemException;
-    void delete( String modelFile, String dataFile, String className ) throws LemException;
-    Entity read( String modelFile, String dataFile, String className ) throws LemException;
-    List<Entity> find( String modelFile, String dataFile, String className ) throws LemException;
+    void add( String modelFile, String dataFile, String className )
+    void update( String modelFile, String dataFile, String className )
+    void delete( String modelFile, String dataFile, String className )
+    Entity read( String modelFile, String dataFile, String className )
+    List<Entity> find( String modelFile, String dataFile, String className )
     
     // Pass objects containing the model and entity:
-    void add( Entity model, Entity data ) throws LemException;
-    void update( Entity model, Entity data ) throws LemException;
-    void delete( Entity model, Entity data ) throws LemException;
-    Entity read( Entity model, Entity data ) throws LemException;
-    List<Entity> find( Entity model, Entity data ) throws LemException;    
+    void add( Entity model, Entity data )
+    void update( Entity model, Entity data )
+    void delete( Entity model, Entity data )
+    Entity read( Entity model, Entity data )
+    List<Entity> find( Entity model, Entity data )
 }
 ```
