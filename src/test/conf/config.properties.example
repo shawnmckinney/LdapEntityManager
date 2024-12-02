@@ -2,6 +2,7 @@ binddn=dc=example,dc=com
 bindpw=secret
 host=localhost
 port=389
+# max connections:
 max=10
 # TLS and LDAPS must not be used simulataneously:
 tls=false
