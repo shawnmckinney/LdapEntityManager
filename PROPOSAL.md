@@ -7,7 +7,7 @@ API uses YAML files to map between logical and physical data formats.
 
 ## Rationale
 
-Work with apps like Apache [SCIMPLE](https://directory.apache.org/scimple/) providing a stable API layer to work with a variety of user data mapping req's. 
+Provide a stable directory interface for apps like Apache [SCIMPLE](https://directory.apache.org/scimple/) that works with a variety of user data mapping req's. 
 
 e.g.
 
@@ -39,10 +39,10 @@ emails:
   - mail
 ```
 
-- The left side contains the logical attr name and the right side is the physical name of the attribute.
+- The left side is entity's logical attr name and the right side is the physical attr name.
 - Lists are declared using YAML syntax rules. 
-- Single element lists declared in the model will map to multival attrs. 
-- Lists with more than one element will be composed of multiple attrs.
+- Single element lists in the model map to multival attrs. 
+- Lists with more than one element are composed of multiple attrs.
 
 ### Sample User Entity
 
@@ -79,8 +79,9 @@ type: rockstar
 
 - The left side contains the logical attr name and the right side is the attr value.
 - In this example, the object_class, phones and emails attrs may be loaded with multiple values.
-- Lists composed of multiple attrs are a special case and must follow mapping rule.
-e.g. model: 
+- Lists of multiple attrs must follow mapping rule.
+e.g. 
+Model attrs: 
 ```
 addresses:
   - postalAddress
@@ -88,7 +89,7 @@ addresses:
   - postalCode
 ```
 
-Data values must be listed in the same order:
+Data attr values in the same order as the model:
 ```
 addresses:
   - Suite 2112$157 Riverside Ave
@@ -98,8 +99,10 @@ addresses:
 
 ### Sample User Objects
 
-- Users will implement their data model by defining entity classes (samples under src/test/org/apache/directory/lem) and the corresponding YAML model and data artifacts (e.g. /src/test/conf)
-- LDAP bindings are contained in (src/test/conf) config.properties file.
+- Users define their logical model with Java entity classes (samples under src/test/org/apache/directory/lem).
+- Users define the logical-to-physical mapping with YAML files or Java classes (e.g. /src/test/conf).
+- Users input data with YAML files or Java classes (e.g. src/test/org/apache/directory/lem).
+- LDAP bindings are contained in config.properties file (src/test/conf).
 
 ### DUMPTY APIs
 
