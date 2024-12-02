@@ -99,10 +99,10 @@ addresses:
 
 ### Sample User Objects
 
-- Users define their logical model with Java entity classes (samples under src/test/org/apache/directory/lem).
-- Users define the logical-to-physical mapping with YAML files or Java classes (e.g. /src/test/conf).
-- Users input data with YAML files or Java classes (e.g. src/test/org/apache/directory/lem).
-- LDAP bindings are contained in config.properties file (src/test/conf).
+- Users define the logical model with a Java entity class (e.g. src/test/org/apache/directory/lem/User.java).
+- Users define the logical-to-physical mapping with YAML (e.g. /src/test/conf/users.yml).
+- User may input data either with YAML files or Java classes (e.g. src/test/org/apache/directory/lem/EntityTest.java).
+- LDAP bindings are contained in file (src/test/conf/config.properties).
 
 ### DUMPTY APIs
 
