@@ -7,7 +7,7 @@ API uses YAML files to map between logical and physical data formats.
 
 ## Rationale
 
-Work with apps like [SCIMPLE](https://directory.apache.org/scimple/) providing a stable API layer to work with a variety of user data mapping req's. 
+Work with apps like Apache [SCIMPLE](https://directory.apache.org/scimple/) providing a stable API layer to work with a variety of user data mapping req's. 
 
 e.g.
 
@@ -39,8 +39,10 @@ emails:
   - mail
 ```
 
-- The left side represents logical and right side is physical names of the attributes.
-- Lists are declared with YAML syntax rules. Single element lists declared in the model will map to multival attrs. Lists > 1 will be composed of multiple attrs.
+- The left side contains the logical attr name and the right side is the physical name of the attribute.
+- Lists are declared using YAML syntax rules. 
+- Single element lists declared in the model will map to multival attrs. 
+- Lists with more than one element will be composed of multiple attrs.
 
 ### Sample User Entity
 
@@ -75,8 +77,8 @@ login: bash
 type: rockstar    
 ```
 
-- The left side contains the logical attr name and the right side has the value.
-- The object_class attr may be loaded with multiple values.
+- The left side contains the logical attr name and the right side is the attr value.
+- In this example, the object_class, phones and emails attrs may be loaded with multiple values.
 - Lists composed of multiple attrs are a special case and must follow mapping rule.
 e.g. model: 
 ```
