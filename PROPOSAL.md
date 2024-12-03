@@ -99,9 +99,9 @@ addresses:
 
 ### Sample User Objects
 
-- Users define the logical model with a Java entity class (e.g. src/test/org/apache/directory/lem/User.java).
+- Users declare the entity with a Java class (e.g. src/test/org/apache/directory/lem/User.java).
 - Users define the logical-to-physical mapping with YAML (e.g. /src/test/conf/users.yml).
-- User may input data either with YAML files or Java classes (e.g. src/test/org/apache/directory/lem/EntityTest.java).
+- User may input data either with YAML files or Java objects (e.g. src/test/org/apache/directory/lem/EntityTest.java).
 - LDAP bindings are contained in file (src/test/conf/config.properties).
 
 ### DUMPTY APIs
@@ -109,14 +109,14 @@ addresses:
 ```
 public interface EntityMgr 
 {
-    // Pass file names to the model and entity:
+    // Pass file names containing the model and data:
     void add( String modelFile, String dataFile, String className )
     void update( String modelFile, String dataFile, String className )
     void delete( String modelFile, String dataFile, String className )
     Entity read( String modelFile, String dataFile, String className )
     List<Entity> find( String modelFile, String dataFile, String className )
     
-    // Pass objects containing the model and entity:
+    // Pass objects containing the model and data:
     void add( Entity model, Entity data )
     void update( Entity model, Entity data )
     void delete( Entity model, Entity data )
