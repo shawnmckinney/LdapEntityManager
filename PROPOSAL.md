@@ -2,8 +2,7 @@
 
 ## Overview
 
-API uses YAML files to map between logical and physical data formats.
-
+CRUD APIs use Java objects and YAML to map between logical and physical data formats.
 
 ## Rationale
 
@@ -39,7 +38,7 @@ emails:
   - mail
 ```
 
-- The left side is entity's logical attr name and the right side is the physical attr name.
+- The left side is the entity's logical attr name and right side is the physical attr name (in LDAP).
 - Lists are declared using YAML syntax rules. 
 - Single element lists in the model map to multival attrs. 
 - Lists with more than one element are composed of multiple attrs.
@@ -89,7 +88,7 @@ addresses:
   - postalCode
 ```
 
-Data attr values in the same order as the model:
+Data attr values are listed in the same order:
 ```
 addresses:
   - Suite 2112$157 Riverside Ave
@@ -97,7 +96,7 @@ addresses:
   - 77777
 ```
 
-### Sample User Objects
+### Sample User Artifacts
 
 - Users declare the entity with a Java class (e.g. src/test/org/apache/directory/lem/User.java).
 - Users define the logical-to-physical mapping with YAML (e.g. /src/test/conf/users.yml).
