@@ -62,14 +62,16 @@ Test cases in EntityTest.java under the test/java folder.
 
 ### Usage
 
+Some guidelines for usage follow (Work In Progress)
+
 #### Java Class
 
-- A Java class must be created to contain the target data structure where the mappings between the logical and physical element names are stored.
-- A field named key is required. It's a String and holds the value of the RDN of the entry.
-- A field named object_class is required. It's List of type String for the definitions of the physical LDAP entry object class names. 
+- A Java class to contains the target data structure where the mappings between the logical and physical element names are stored.
+- An attribute named key is required.
+- An attribute named object_class is required.
 - The class must implement the org.apache.directory.lem.Enitity and java.io.Serializable interfaces.
 - All other field names and types are defined by the User per their target LDAP system reqs.
-- The data types corresponds with the physical model. (Directory) Strings, Integers, Booleans and other LDAP schema attribute types are (will be) supported.
+- The data types correspond with the physical model. (Directory) Strings, Integers, Booleans and other LDAP schema attribute types are (will be) supported.
 
 ```
 public class UserSample implements Entity, Serializable
@@ -103,7 +105,8 @@ object_class:
 ```
 
 This sample structure is compatible with inetorgperson in LDAP. It contains basic attributes like uid, cn, sn, description and userPassword.
-LEM models require both key and object_class which are used to define a Relative Distinquished Name (RDN) for the entry along with the physical data structure in LDAP.
+Requires a field named key which contains the physical attribute name of the Relative Distinquished Name (RDN).
+Requires a field named object_class which contains the LDAP objectClass attribute name.
 Any LDAP data entry is supported. Users, Groups, Organizational Units, etc.
 
 
