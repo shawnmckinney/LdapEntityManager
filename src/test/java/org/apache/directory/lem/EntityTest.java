@@ -45,6 +45,7 @@ public class EntityTest
         t.readEntity( "groups.yml", "groups-d1.yml", "org.apache.directory.lem.Group" );
         t.deleteEntity( "users.yml", "users-d1.yml", "org.apache.directory.lem.User" );        
         t.addEntity( "users.yml", "users-d1.yml", "org.apache.directory.lem.User" );
+        t.updateEntity( "users.yml", "users-u1.yml", "org.apache.directory.lem.User" );        
         t.readEntity( "users.yml", "users-d1.yml", "org.apache.directory.lem.User" );        
         
         //t.addUsers( "users.yml", "users-r1.yml", "org.apache.directory.lem.User" );
@@ -135,6 +136,20 @@ public class EntityTest
         {
             eMgr.add( modelFile, dataFile, className );
             LOG.info("Successful Test Add");
+        }
+        catch ( LemException e )
+        {
+            LOG.error( CLS_NM, e );
+        }        
+    }    
+    
+    private void updateEntity( String modelFile, String dataFile, String className )
+    {
+        EntityMgr eMgr = new EntityMgrImpl();
+        try
+        {
+            eMgr.update( modelFile, dataFile, className );
+            LOG.info("Successful Test Update");
         }
         catch ( LemException e )
         {

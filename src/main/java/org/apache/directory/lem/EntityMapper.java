@@ -109,89 +109,6 @@ public class EntityMapper
         return inentity;
     }  
     
-    public static MultiValuedMap loadMap2 ( Entity inmodel, Entity inentity ) throws LemException
-    {
-        Field[] fields = inentity.getClass().getDeclaredFields();
-        MultiValuedMap map = new ArrayListValuedHashMap();
-        try 
-        {      
-            for ( Field entity : fields ) 
-            {
-                entity.setAccessible(true);
-                String name = entity.getName();
-                LOG.debug( "Name: {}", name );
-                Field model = inmodel.getClass().getDeclaredField( name );
-                model.setAccessible( true );
-                switch ( entity.getType().getSimpleName() )
-                {
-                    case "List" -> 
-                    {
-                        LOG.info("LIST: {}", entity.get(inmodel));
-                        //if ((List)entity.get( inentity ) != null && model.get ( inmodel ) != null )
-                        if ( model.get ( inmodel ) != null )
-                        {
-                            List modelAttrs = (List)model.get(inmodel);
-                            /* Rules for Attr lists:
-                            1. If model's attr has one value (type), it's a multival ldap attr, e.g. emails
-                            2024-10-31 19:47:020 INFO  EntityDao:82 - LIST AAR: [objectClass], ENTITY VALUE: [inetorgperson, posixaccount]
-                            2. If model's attr list > 1, it's a collection of single value attrs, e.g. addresses LIST: [ postalAddress, l, postalCode ]
-                            */                                                    
-                            int i = 0;
-                            //for ( var entityAttrValue : (List)entity.get ( inentity ))
-                            for ( var entityAttrValue : (List)model.get ( inmodel ))
-                            {    
-                                LOG.debug("LIST: {}, ENTITY VALUE: {}, NM {}", model.get(inmodel), model.get ( inmodel ), entityAttrValue );
-                                String modelAttrName;
-                                if( modelAttrs.size() > 1 )
-                                {
-                                    modelAttrName = (String)modelAttrs.get(i);
-                                    map.put( modelAttrName, entityAttrValue.toString() );
-                                }
-                                else
-                                {
-                                    modelAttrName = (String)modelAttrs.get(0);
-                                    map.put( modelAttrName, entityAttrValue.toString() );
-                                }
-                                LOG.debug("LIST ATTR NM: {}, VALUE: {}", modelAttrName, entityAttrValue);
-                                i++;
-                            }   
-                        }
-                    }
-                    case "String" -> 
-                    {
-                        entity.setAccessible( true );
-                        String modelAttrName = (String)model.get(inmodel);
-                        String entityAttrValue = (String)entity.get( inentity );                        
-                        LOG.debug("String ATTR NM: {}, VALUE: {}", modelAttrName, entityAttrValue);
-                        if ( entityAttrValue != null )
-                        {
-                            //if ( name.compareToIgnoreCase("rdn") == 0 )
-                            if ( name.compareToIgnoreCase("key") == 0 )
-                            {
-                                String nodeDn = modelAttrName + "=" + entityAttrValue + "," + Config.getString( inentity.getClass().getTypeName() );
-                                LOG.debug("NODE DN: {}", nodeDn );
-                                map.put( "dn", nodeDn );                                
-                            }
-                            else
-                            {                                
-                                map.put( modelAttrName, entityAttrValue );
-                            }                            
-                        }
-                        else
-                        {
-                            map.put( modelAttrName, "" );                            
-                        }
-                    }
-                }
-            }
-        }
-        catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException ex) 
-        {
-            java.util.logging.Logger.getLogger(CLS_NM).log(Level.SEVERE, null, ex);
-        }
-        return map;
-    }  
-    
     /**
      * This routine uses Java Reflection to iterate over an object's fields and convert into LDAP attributes.
      * It uses two objects: the entity's name is pulled from "model", the values from the "entity".
@@ -216,16 +133,15 @@ public class EntityMapper
                 {
                     case "List" -> 
                     {
-                        LOG.info("LIST: {}", entity.get(inmodel));
-                        //if ((List)entity.get( inentity ) != null && model.get ( inmodel ) != null )
-                        if (model.get ( inmodel ) != null )
+                        LOG.debug("LIST: {}", entity.get(inmodel));                  
+                        if (model.get ( inmodel ) != null && entity.get ( inentity ) != null)
                         {
                             List modelAttrs = (List)model.get(inmodel);
                             /* Rules for Attr lists:
                             1. If model's attr has one value (type), it's a multival ldap attr, e.g. emails
                             2024-10-31 19:47:020 INFO  EntityDao:82 - LIST AAR: [objectClass], ENTITY VALUE: [inetorgperson, posixaccount]
                             2. If model's attr list > 1, it's a collection of single value attrs, e.g. addresses LIST: [ postalAddress, l, postalCode ]
-                            */                                                    
+                            */            
                             int i = 0;
                             for ( var entityAttrValue : (List)entity.get ( inentity ))
                             {    

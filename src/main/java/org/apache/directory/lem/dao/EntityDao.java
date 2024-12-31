@@ -24,7 +24,10 @@ import java.util.List;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import org.apache.directory.api.ldap.model.entry.DefaultEntry;
+import org.apache.directory.api.ldap.model.entry.DefaultModification;
 import org.apache.directory.api.ldap.model.entry.Entry;
+import org.apache.directory.api.ldap.model.entry.Modification;
+import org.apache.directory.api.ldap.model.entry.ModificationOperation;
 import org.apache.directory.api.ldap.model.exception.LdapException;
 import org.apache.directory.api.ldap.model.exception.LdapInvalidAttributeValueException;
 import org.apache.directory.ldap.client.api.LdapConnection;
@@ -69,6 +72,10 @@ public class EntityDao extends BaseDao
             String[] atrs = attrs.toArray(new String[0]);
             ld = getConnection();            
             entry = read( ld, nodeDn, atrs );
+            if (entry == null)
+            {
+                throw new LemException( "Entry DN [" + nodeDn + "] not found" );
+            }
             //entry = read( ld, nodeDn, new String[]{"*"} );
             out = unloadLdapEntry( entry, entryMap );
         }
@@ -142,6 +149,49 @@ public class EntityDao extends BaseDao
         catch ( LdapException e )
         {
             String error = "create node dn [" + nodeDn + "] caught LDAPException=" + e;
+            throw new LemException( error, e );
+        }
+        finally
+        {
+            closeConnection( ld );
+        }
+    }    
+
+    public void mod( MultiValuedMap <String, List>entryMap ) throws LemException
+    {
+        LdapConnection ld = null;
+        String nodeDn = null;
+        Entry entry = new DefaultEntry();
+        List<Modification> mods = new ArrayList<Modification>();
+        try
+        {
+            for (String key : entryMap.keySet())
+            {
+                LOG.debug( "key [{}], value: [{}]", key, entryMap.get( key ) );
+                List<String> vals = (List)entryMap.get( key );
+                for ( String value : vals )
+                {
+                    if( key.toString().equalsIgnoreCase("DN"))
+                    {
+                        nodeDn = value;
+                    }
+                    else
+                    {
+                        mods.add( new DefaultModification( ModificationOperation.REPLACE_ATTRIBUTE, key.toString(), value ) );
+                        //mods.add( new DefaultModification( ModificationOperation.ADD_ATTRIBUTE, key.toString(), value ) );
+                    }
+                }
+            }            
+            if ( mods.size() > 0 )
+            {
+                ld = getConnection();
+                modify( ld, nodeDn, mods );
+                LOG.debug( "updated group dn [{}]", nodeDn );
+            }
+        }
+        catch ( LdapException e )
+        {
+            String error = "mod node dn [" + nodeDn + "] caught LDAPException=" + e;
             throw new LemException( error, e );
         }
         finally

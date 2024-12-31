@@ -49,35 +49,23 @@ public class EntityMgrImpl implements EntityMgr
 
     public void add( Entity model, Entity data ) throws LemException
     {
-        try
-        {
-            EntityDao eDao = new EntityDao();            
-            MultiValuedMap map = EntityMapper.loadMap( model, data );            
-            eDao.create(map);
-        }
-        catch ( LemException e )
-        {
-            LOG.error( CLS_NM, e );
-        }        
+        EntityDao eDao = new EntityDao();            
+        MultiValuedMap map = EntityMapper.loadMap( model, data );            
+        eDao.create(map);
     }
             
     public void update( Entity model, Entity data ) throws LemException
     {
-        throw new java.lang.UnsupportedOperationException();
+        EntityDao eDao = new EntityDao();            
+        MultiValuedMap map = EntityMapper.loadMap( model, data );            
+        eDao.mod(map);
     }
             
     public void delete( Entity model, Entity data ) throws LemException
     {
-        try
-        {
-            EntityDao eDao = new EntityDao();            
-            MultiValuedMap map = EntityMapper.loadMap( model, data );            
-            eDao.remove(map);
-        }
-        catch ( LemException e )
-        {
-            LOG.error( CLS_NM, e );
-        }        
+        EntityDao eDao = new EntityDao();            
+        MultiValuedMap map = EntityMapper.loadMap( model, data );            
+        eDao.remove(map);
     }
             
     public Entity read( String modelFile, String dataFile, String className ) throws LemException
@@ -89,20 +77,10 @@ public class EntityMgrImpl implements EntityMgr
     {
         MultiValuedMap outMap = null;
         Entity outEntity = null;
-        try
-        {
-            EntityDao eDao = new EntityDao();            
-            MultiValuedMap map = EntityMapper.loadMap2( model, data );            
-            outMap = eDao.get(map);
-            outEntity = EntityMapper.unloadMap(model, data, outMap);
-            LOG.debug("finished");
-            
-        }
-        catch ( LemException e )
-        {
-            LOG.error( CLS_NM, e );
-        }        
-        return outEntity;        
+        EntityDao eDao = new EntityDao();            
+        MultiValuedMap map = EntityMapper.loadMap( model, data );
+        outMap = eDao.get(map);
+        return EntityMapper.unloadMap(model, data, outMap);
     }
     
     public List<Entity> find( Entity model, Entity data ) throws LemException
@@ -112,7 +90,7 @@ public class EntityMgrImpl implements EntityMgr
     
     public void update( String modelFile, String dataFile, String className ) throws LemException
     {
-        throw new java.lang.UnsupportedOperationException();
+        update( ResourceUtil.unmarshal( modelFile, className ), ResourceUtil.unmarshal( dataFile, className ) );
     }
             
     public void delete( String modelFile, String dataFile, String className ) throws LemException
