@@ -9,13 +9,14 @@ The second contains the actual data using the logical definitions for referencin
     - [see](./PROPOSAL.md)
 
 ## Details
-- LEM uses Apache Directory LDAP API for data access. The configuration for target LDAP instance is stored in the config.properties file as name:value pairs.
-- Apache Log4j2 is the used for logging. It uses a configuration file name log4j2.xml.
-- The data input (model and entity) are stored in the test/conf folder.
+- LEM uses Apache Directory LDAP API for data access. 
+- Apache Commons Configuration is used for LDAP coordinates and stored in the config.properties file as name:value pairs.
+- Apache Log4j2 for logging and its config in log4j2.xml.
+- The data model and entity files are in test/conf folder.
 
 ## Design
 
-LEM APIs are defined in the EntityMgr.java interface. There are two ways of interacting with them:
+LEM APIs are defined in the EntityMgr.java interface and have two usage options:
 
 1. Passing YAML files as args
     - add( String modelFile, String dataFile, String className )
@@ -23,9 +24,9 @@ LEM APIs are defined in the EntityMgr.java interface. There are two ways of inte
 2. Passing Java objects as args
     - void add( Entity model, Entity data )
 
-- #1 unmarshals the YAML into Java objects before calling 2. 
-- #2 saves YAML processing steps and has Java objects as arguments.
-- Both are functionally the same. Choose the one that works best for integration.
+- #1 unmarshals the YAML into Java objects before calling 2 (automatically). 
+- #2 accepts Java objects as arguments.
+- Both are functionally equivilent.
 
 ## Operations:
 
@@ -50,18 +51,43 @@ LEM APIs are defined in the EntityMgr.java interface. There are two ways of inte
 ### Unmarshal
 Takes the two YAML files as input and using Jackson converts into Java objects.
 
-### Reflection
-Uses Java reflection and converts the objects into a map of multi-values.
+### Java Reflection
+Converts the objects into a map of multi-values.
 
 ### DAO
-Load the name/value pairs from the Map into LDAP attributes and creates the entry.
+Load the name/value pairs from the Map into LDAP attributes and perform the LDAP operation.
 
 ### Tests
 Test cases in EntityTest.java under the test/java folder.
 
 ### Usage
 
-Users must implement data model and entity classes. The model maps between the logical and physical data structure.
+#### Java Class
+
+- A Java class must be created to contain the target data structure where the mappings between the logical and physical element names are stored.
+- A field named key is required. It's a String and holds the value of the RDN of the entry.
+- A field named object_class is required. It's List of type String for the definitions of the physical LDAP entry object class names. 
+- The class must implement the org.apache.directory.lem.Enitity and java.io.Serializable interfaces.
+- All other field names and types are defined by the User per their target LDAP system reqs.
+- The data types corresponds with the physical model. (Directory) Strings, Integers, Booleans and other LDAP schema attribute types are (will be) supported.
+
+```
+public class UserSample implements Entity, Serializable
+{
+    private String key;                // required
+    private List<String> object_class; // required
+    private String name;
+    private String full_name;
+    private String last_name;
+    private String password;    
+    private List<String> description;
+# getters and setters follow:
+...
+```
+
+#### YAML Model File
+
+A model file is created to map between the logical and physical data structure.
 
 ```
 # sample LEM model:
@@ -76,10 +102,16 @@ object_class:
   - objectClass
 ```
 
-This structure is compatible with inetorgperson in LDAP. It contains basic attributes like uid, cn, sn, description and userPassword.
+This sample structure is compatible with inetorgperson in LDAP. It contains basic attributes like uid, cn, sn, description and userPassword.
 LEM models require both key and object_class which are used to define a Relative Distinquished Name (RDN) for the entry along with the physical data structure in LDAP.
+Any LDAP data entry is supported. Users, Groups, Organizational Units, etc.
 
-To define the data entity, all LDAP semantics and syntaxes are followed. To add an entry, the required fields must be present, otherwise an error will be returned from the API.
+
+#### YAML Entity File
+
+A data entity file is required if using interface type #1. It contains the actual data to be processed by the APIs.
+LDAP semantics and syntaxes must be followed. Errors in LDAP are returned as checked Exceptions from the APIs.
+
 
 ```
 # add sample entity
