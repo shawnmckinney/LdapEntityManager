@@ -66,7 +66,7 @@ Some guidelines for usage follow (Work In Progress)
 
 #### Java Class
 
-- A Java class to contains the target data structure where the mappings between the logical and physical element names are stored.
+- A Java class to contain the target data structure where the mappings between the logical and physical element names are stored.
 - An attribute named key is required.
 - An attribute named object_class is required.
 - The class must implement the org.apache.directory.lem.Enitity and java.io.Serializable interfaces.

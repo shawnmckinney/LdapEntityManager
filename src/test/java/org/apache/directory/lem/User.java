@@ -33,6 +33,7 @@ public class User implements Entity, Serializable
 {
     private static final long serialVersionUID = 1L;
     private String key;    
+    private String filter;        
     private String name;
     private String full_name;
     private String last_name;
@@ -207,6 +208,14 @@ public class User implements Entity, Serializable
     public void setDescription(List<String> description) 
     {
         this.description = description;
+    }
+    
+    public String getFilter() {
+        return filter;
+    }
+
+    public void setFilter(String filter) {
+        this.filter = filter;
     }
     
     @Override

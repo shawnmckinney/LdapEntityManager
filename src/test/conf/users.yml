@@ -1,4 +1,5 @@
 key: uid
+filter: filter
 name: uid
 full_name: cn
 last_name: sn

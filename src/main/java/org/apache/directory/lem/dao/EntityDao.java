@@ -19,10 +19,13 @@
  */
 package org.apache.directory.lem.dao;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
+import org.apache.directory.api.ldap.model.cursor.CursorException;
+import org.apache.directory.api.ldap.model.cursor.SearchCursor;
 import org.apache.directory.api.ldap.model.entry.DefaultEntry;
 import org.apache.directory.api.ldap.model.entry.DefaultModification;
 import org.apache.directory.api.ldap.model.entry.Entry;
@@ -30,6 +33,7 @@ import org.apache.directory.api.ldap.model.entry.Modification;
 import org.apache.directory.api.ldap.model.entry.ModificationOperation;
 import org.apache.directory.api.ldap.model.exception.LdapException;
 import org.apache.directory.api.ldap.model.exception.LdapInvalidAttributeValueException;
+import org.apache.directory.api.ldap.model.message.SearchScope;
 import org.apache.directory.ldap.client.api.LdapConnection;
 import org.apache.directory.lem.LemException;
 import org.slf4j.Logger;
@@ -91,8 +95,81 @@ public class EntityDao extends BaseDao
         
         LOG.debug( "read dn [{}]", nodeDn );        
         return out;
-    }    
-
+    }   
+    
+    
+    public List<MultiValuedMap> find( String rootDn, MultiValuedMap <String, List>entryMap ) throws LemException
+    {
+        LdapConnection ld = null;
+        List<MultiValuedMap> out = new ArrayList<>();
+        String filter = null;
+        try
+        {
+            List<String> attrs = new ArrayList<String>();
+            for (String key : entryMap.keySet())
+            {
+                //LOG.debug( "key [{}], value: [{}]", key, entryMap.get( key ) );
+                List<String> vals = (List)entryMap.get( key );                
+                for ( String value : vals )
+                {
+                    if( key.toString().equalsIgnoreCase("filter"))
+                    {
+                        filter = value;
+                    }
+/*                    else if( ! key.toString().equalsIgnoreCase("DN"))
+                    {
+                        attrs.add( key );
+                    }
+*/                    
+                    else
+                    {
+                        attrs.add( key );
+                    }
+                }                
+            }           
+            String[] atrs = attrs.toArray(new String[0]);
+            StringBuilder filterbuf = new StringBuilder();
+            filterbuf.append( "(" );
+            filterbuf.append( filter );
+            filterbuf.append( ")" );                                               
+            ld = getConnection();            
+            try ( SearchCursor searchResults = search( ld, rootDn, SearchScope.ONELEVEL, filterbuf.toString(), new String[]{"*"}, false ) )
+            {
+                long sequence = 0;
+                while ( searchResults.next() )
+                {
+                    MultiValuedMap <String, List> entity = unloadLdapEntry( searchResults.getEntry(), entryMap );
+                    out.add( entity );
+                    //out.add( unloadLdapEntry( searchResults.getEntry(), entryMap ));
+                    //out.add( unloadLdapEntry( searchResults.getEntry(), atrs ));
+                }
+            }
+            catch ( IOException e )
+            {
+                String error = "find base DN [" + rootDn + "] caught IOException=" + e.getMessage();
+                throw new LemException( error, e );
+            }
+            catch ( CursorException e )
+            {
+                String error = "find base DN [" + rootDn + "] caught CursorException=" + e.getMessage();
+                throw new LemException( error, e );
+            }        
+        }
+        catch ( LdapException e )
+        {
+            String error = "find base DN [" + rootDn + "] caught LDAPException=" + e;
+            throw new LemException( error, e );
+        }
+        finally
+        {
+            closeConnection( ld );
+        }
+        
+        LOG.debug( "find base DN [{}]", rootDn );        
+        return out;
+    }   
+    
+    
     private MultiValuedMap <String, List> unloadLdapEntry( Entry le, MultiValuedMap <String, List>entryMap )
         throws LdapInvalidAttributeValueException
     {
@@ -119,10 +196,29 @@ public class EntityDao extends BaseDao
         return map;
     }
     
+
+    private MultiValuedMap <String, List> unloadLdapEntry( Entry le, String[] atrs  )
+        throws LdapInvalidAttributeValueException
+    {
+        MultiValuedMap map = new ArrayListValuedHashMap();   
+        for ( String key : atrs )
+        {
+            List at = getAttributes( le, key );
+            if ( at != null )
+            {
+                for( Object var : at )
+                {
+                    map.put(key, var.toString() );
+                }                    
+            }            
+        }
+        return map;
+    }
+    
     public void create( MultiValuedMap <String, List>entryMap ) throws LemException
     {
         LdapConnection ld = null;
-        String nodeDn = null;
+        //String nodeDn = null;
         Entry entry = new DefaultEntry();
         try
         {
@@ -144,11 +240,11 @@ public class EntityDao extends BaseDao
             }            
             ld = getConnection();
             add( ld, entry );
-            LOG.debug( "created group dn [{}]", nodeDn );
+            LOG.debug( "created group dn [{}]", entry.getDn() );
         }
         catch ( LdapException e )
         {
-            String error = "create node dn [" + nodeDn + "] caught LDAPException=" + e;
+            String error = "create node dn [" + entry.getDn() + "] caught LDAPException=" + e;
             throw new LemException( error, e );
         }
         finally

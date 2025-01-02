@@ -19,6 +19,8 @@
  */
 package org.apache.directory.lem;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.directory.lem.dao.EntityDao;
@@ -50,21 +52,21 @@ public class EntityMgrImpl implements EntityMgr
     public void add( Entity model, Entity data ) throws LemException
     {
         EntityDao eDao = new EntityDao();            
-        MultiValuedMap map = EntityMapper.loadMap( model, data );            
+        MultiValuedMap map = EntityMapper.loadEntityMap( model, data );            
         eDao.create(map);
     }
             
     public void update( Entity model, Entity data ) throws LemException
     {
         EntityDao eDao = new EntityDao();            
-        MultiValuedMap map = EntityMapper.loadMap( model, data );            
+        MultiValuedMap map = EntityMapper.loadEntityMap( model, data );            
         eDao.mod(map);
     }
             
     public void delete( Entity model, Entity data ) throws LemException
     {
         EntityDao eDao = new EntityDao();            
-        MultiValuedMap map = EntityMapper.loadMap( model, data );            
+        MultiValuedMap map = EntityMapper.loadEntityMap( model, data );            
         eDao.remove(map);
     }
             
@@ -75,18 +77,46 @@ public class EntityMgrImpl implements EntityMgr
             
     public Entity read( Entity model, Entity data ) throws LemException
     {
-        MultiValuedMap outMap = null;
-        Entity outEntity = null;
         EntityDao eDao = new EntityDao();            
-        MultiValuedMap map = EntityMapper.loadMap( model, data );
-        outMap = eDao.get(map);
-        return EntityMapper.unloadMap(model, data, outMap);
+        MultiValuedMap inMap = EntityMapper.loadModelMap( model, data );
+        MultiValuedMap outMap = eDao.get(inMap);
+        Entity entity = instantiate ( model );
+        EntityMapper.unloadMap(model, entity, outMap);
+        return entity;
     }
     
     public List<Entity> find( Entity model, Entity data ) throws LemException
     {
-        throw new java.lang.UnsupportedOperationException();
+        List<Entity> entities = null;
+        EntityDao eDao = new EntityDao();            
+        MultiValuedMap map = EntityMapper.loadModelMap( model, data );
+        List<MultiValuedMap> out = eDao.find( Config.getString( model.getClass().getTypeName() ), map );
+        if ( out != null && !out.isEmpty() )
+        {
+            entities = new ArrayList<>();
+            for ( MultiValuedMap item : out )
+            {
+                Entity entity = instantiate ( model );
+                EntityMapper.unloadMap(model, entity, item);
+                entities.add( entity );
+            }
+        }
+        return entities;
     }    
+
+    private Entity instantiate ( Entity model ) throws LemException
+    {
+        Entity empty = null;
+        try 
+        {                    
+            empty = model.getClass().getDeclaredConstructor().newInstance();
+        } 
+        catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException  ex) 
+        {
+            throw new LemException( "instantiate caught exception: " + ex.getMessage(), ex );
+        }      
+        return empty;
+    }
     
     public void update( String modelFile, String dataFile, String className ) throws LemException
     {
@@ -100,6 +130,6 @@ public class EntityMgrImpl implements EntityMgr
             
     public List<Entity> find( String modelFile, String dataFile, String className ) throws LemException
     {
-        throw new java.lang.UnsupportedOperationException();
+        return find( ResourceUtil.unmarshal( modelFile, className ), ResourceUtil.unmarshal( dataFile, className ) );
     }
 }

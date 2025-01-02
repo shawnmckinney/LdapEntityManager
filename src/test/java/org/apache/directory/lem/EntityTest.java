@@ -39,6 +39,7 @@ public class EntityTest
         LOG.info("{} Entity Test", CLS_NM );        
         EntityTest t = new EntityTest();
 
+        
         t.readEntity( "users.yml", "users-r1.yml", "org.apache.directory.lem.User" );        
         t.deleteEntity( "groups.yml", "groups-d1.yml", "org.apache.directory.lem.Group" );
         t.addEntity( "groups.yml", "groups-d1.yml", "org.apache.directory.lem.Group" );
@@ -46,12 +47,38 @@ public class EntityTest
         t.deleteEntity( "users.yml", "users-d1.yml", "org.apache.directory.lem.User" );        
         t.addEntity( "users.yml", "users-d1.yml", "org.apache.directory.lem.User" );
         t.updateEntity( "users.yml", "users-u1.yml", "org.apache.directory.lem.User" );        
-        t.readEntity( "users.yml", "users-d1.yml", "org.apache.directory.lem.User" );        
-        
+        //t.readEntity( "users.yml", "users-d1.yml", "org.apache.directory.lem.User" );                
+        t.readEntity( "users.yml", "users-r1.yml", "org.apache.directory.lem.User" );        
+        t.findEntities("users.yml", "users-r1.yml", "org.apache.directory.lem.User" );        
         //t.addUsers( "users.yml", "users-r1.yml", "org.apache.directory.lem.User" );
 
         
     }
+    
+    private void findEntities( String modelFile, String dataFile, String className )
+    {
+        EntityMgr eMgr = new EntityMgrImpl();
+        try
+        {
+            List<Entity> entities = eMgr.find(modelFile, dataFile, className );
+            if ( entities != null && !entities.isEmpty() )
+            {
+                for ( Entity entity : entities )
+                {
+                    LOG.info("Entity found [{}]", entity.toString());
+                }
+                
+            }
+            else
+            {
+                LOG.info("findEntities returned nothing");
+            }
+        }
+        catch ( LemException e )
+        {
+            LOG.error( CLS_NM, e );
+        }        
+    }    
     
     private void readEntity( String modelFile, String dataFile, String className )
     {
