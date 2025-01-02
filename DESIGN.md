@@ -1,9 +1,9 @@
 # Overview
 
-Ldap Entry Manager (LEM) reads and writes records from an LDAP database. It uses LDAPv3 protocol for Create Read Update Delete (CRUD).
-The mapping between the backend database and the entity that is exposed via the API is defined in Yet Another Markup Language (YAML) format.
-There are two input files to the APIs. The first is the entity model which defines the mapping between the logical and physical format. 
-The second contains the actual data using the logical definitions for referencing the physical data values.
+LDAP Entity Manager (LEM) reads and writes records from an LDAP database. It uses LDAPv3 protocol to Create Read Update Delete (CRUD).
+The mappings between the backend database and the entities are defined in Yet Another Markup Language (YAML) format and Java classes.
+There are two input files to the APIs. The first, the entity's model, defines the mappings between the logical and physical format. 
+The second, the entity's data, contains the actual data using the logical format defined in the model.
 
 ## YAML model, entitity data and API
     - [see](./PROPOSAL.md)
