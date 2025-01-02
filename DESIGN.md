@@ -89,7 +89,7 @@ public class UserSample implements Entity, Serializable
 
 #### YAML Model File
 
-A model file is created to map between the logical and physical data structure.
+A model file is created to map between the logical and physical data structure. Its attribute names correspond with the entity class.
 
 ```
 # sample LEM model:
@@ -104,15 +104,15 @@ object_class:
   - objectClass
 ```
 
-This sample structure is compatible with inetorgperson in LDAP. It contains basic attributes like uid, cn, sn, description and userPassword.
-Requires a field named key which contains the physical attribute name of the Relative Distinquished Name (RDN).
-Requires a field named object_class which contains the LDAP objectClass attribute name.
-Any LDAP data entry is supported. Users, Groups, Organizational Units, etc.
+- This sample structure is compatible with inetorgperson in LDAP. It contains attributes like uid, cn, sn, description and userPassword.
+- LEM requires a field named 'key' which contains the physical attribute name of the Relative Distinquished Name (RDN) of the LDAP node.
+- LEM requires a field named 'object_class' which contains the LDAP attribute name for objectClass.
+- All LDAP strutural and auxilliary objectClasses are supported. All LDAP attributes are supported.
 
 
 #### YAML Entity File
 
-A data entity file is required if using interface type #1. It contains the actual data to be processed by the APIs.
+A data entity file is required when using interface type #1. It contains the actual data to be processed by the APIs.
 LDAP semantics and syntaxes must be followed. Errors in LDAP are returned as checked Exceptions from the APIs.
 
 
@@ -146,4 +146,16 @@ Deletes and reads have a key defined which contains the RDN of the node. Searche
 # delete/read/search sample
 key: acme1
 filter: *
+```
+
+#### Entity Declarations
+
+All LEM entities must be declared in its config.properties file. 
+These contain the fully qualified class name of the entity on the left side and its LDAP coordinates on the right.
+
+```
+# config.properties
+...
+org.apache.directory.lem.User=ou=people,dc=example,dc=com
+org.apache.directory.lem.Group=ou=groups,dc=example,dc=com
 ```

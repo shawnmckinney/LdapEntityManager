@@ -10,3 +10,5 @@ ldaps=false
 trust.store=truststore.jks
 trust.store.pw=changeit
 trust.store.classpath=true
+org.apache.directory.lem.User=ou=people,dc=example,dc=com
+org.apache.directory.lem.Group=ou=groups,dc=example,dc=com
