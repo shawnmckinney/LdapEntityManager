@@ -57,6 +57,20 @@ Converts the objects into a map of multi-values.
 ### DAO
 Load the name/value pairs from the Map into LDAP attributes and perform the LDAP operation.
 
+Contained in the dao package. It's comprised of the following:
+- BaseDao.java: boilerplate functionality for interacting with the LDAP data layer.
+- ConnectionProvider.java: a connection pool implementation.
+- ResourceUtil.java utilities for processing needed by the DAO functions.
+- TrustStoreManager.java used during LDAPS and TLS connections.
+- EntityDao.java functions to read, write and search the LDAP entities.
+
+Of these, the EntityDao's design is novel. It depends on the caller passing the input data
+in maps containing a dictionary of attribute names and their associated values. 
+It's expected that this code will have to change as it matures to handle more complex use cases. 
+Eventually, if the design's successful, it'll stabilize.
+
+This is the advantage of LEM over other LDAP CRUD APIs. Adapting to a variety of complex mappings without code changes.
+
 ### Tests
 Test cases in EntityTest.java under the test/java folder.
 
