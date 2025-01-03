@@ -2,18 +2,19 @@
 
 ## Overview
 
-LEM uses LDAP protocol to Create Read Update Delete (CRUD) and search.
-Its data definitions are defined in Yet Another Markup Language (YAML) format.
+Use LDAP protocol to Create Read Update Delete (CRUD) and search records in the directory.
+Process data in Yet Another Markup Language (YAML) files and Java objects.
+Pass data internally with map of multi-values. No hardcoded mappings encoded in the data access layer.
 
 ## Data Model and API
     - [see](./PROPOSAL.md)
 
-## External Files and Dependencies
+## External Files, Dependencies and Runtime
 
-Uses two input files. The first, model, defines the mappings between the logical and physical format. 
+Use two input files. The first, model, defines the mappings between the logical and physical format. 
 The second, entity, contains the actual data in logical format defined by the model.
 
-It runs on the Java platform and uses ...
+Run on the Java platform and use ...
 - Apache Directory LDAP API for data access.
 - Apache Commons Configuration for property storage.
 - Apache Log4j2 for logging utility.
@@ -23,12 +24,12 @@ Sample data model, entity files and configs are under the test/conf project fold
 
 ## API Design
 
-LEM APIs are defined in the EntityMgr interface. There are two usage options:
+Defined in the EntityMgr interface. Two options for usage:
 
-1. Accepts YAML files as args, unmarshals into Java objects before calling #2 (automatically).
+1. Accept YAML files as args, unmarshal before calling #2 (automatically).
     - do( String modelFile, String dataFile, String className )
-    - className is name of Java class name of the model and entity.
-2. Passing Java objects as args
+    - fully qualified className of the entity.
+2. Pass Java objects as args
     - do( Entity model, Entity data )
 
 - Both are functionally equivilent.
@@ -54,31 +55,30 @@ LEM APIs are defined in the EntityMgr interface. There are two usage options:
 --> Marshal Java Objects -> YAML
 
 ### Unmarshal YAML
-Takes the two YAML files as input and using Jackson converts into Java objects.
+Accept two YAML files as input and convert into Java objects with Jackson.
 
-### Java Reflection
-Converts the objects into a map of multi-values.
+### Java Multi-Valued Map
+Convert Java objects into multi-valued maps with Java reflection.
 
 ### DAO Module Description
 These classes handle processing between the interface and backend database resource.
 
 | Java Classname     | has the following function                   |
 |--------------------|----------------------------------------------|
+| EntityDao          | Create, Read, Update, Delete, Search LDAP    |
 | BaseDao            | Apache LDAP API wrapper                      |
 | ConnectionProvider | LDAP connection pool processing              |
 | ResourceUtil       | Perform Jackson Data Binding ops             |
 | TrustStoreManager  | Used in LDAPS/TLS connections                |
-| EntityDao          | Create, Read, Update, Delete, Search LDAP    |
 
-- EntityDao passes data in and out using a map.
-- It contains the list of attribute names and their associated values.
-- LEM adapts to a various data types without modification to its DAO module code.
+- EntityDao passes data using a multi-valued map.
+- Support various data formats without modification to the DAO module code.
 
 ### Entity Mapper Description
 
-- Uses Apache Commons Collections for storing LDAP attributes as name, value pairs inside a map. The values may be single or multivalued.
-- The map is keyed by the LDAP attr name and its value is an ArrayList of Strings. The LDAP API will set the proper attribute types in the database per schema requirements.
-- The mapper is used internally for entity conversions from logical to physical names as required by the DAO module APIs.
+- Uses Apache Commons Collections to store LDAP attributes as name, value pairs inside a map. Values may be single or multivalued.
+- Key map by the LDAP attr name. Store attribute value in an ArrayList of Strings. 
+- Do not expose map outside of DAO module.
 
 Sample LEM record:
 
@@ -147,9 +147,8 @@ The Java class ...
 - an attribute named 'key'.
 - an attribute named 'object_class'.
 - implements the org.apache.directory.lem.Enitity and java.io.Serializable interfaces.
-- contains other fields as required by the User per their target LDAP system.
-- all other fields are user defined as type String or List for single or multivalued attributes. 
-- data conversions performed by LDAP API as defined in the LDAP schema.
+- contains other fields as required by the User.
+- fields are defined as type String or List for single or multivalued attrs. 
 
 ```
 public class UserSample implements Entity, Serializable
@@ -167,7 +166,7 @@ public class UserSample implements Entity, Serializable
 
 #### YAML Model File
 
-A model file is created to map between the logical and physical data structure. Its attribute names correspond with the entity class.
+A model file is created to map between the logical and physical attribute names.
 
 ```
 # sample LEM model:
@@ -183,13 +182,13 @@ object_class:
 ```
 
 - This sample structure is compatible with inetorgperson in LDAP. It contains attributes like uid, cn, sn, description and userPassword.
-- LEM requires a field named 'key' which contains the physical attribute name of the Relative Distinquished Name (RDN) of the LDAP node.
-- LEM requires a field named 'object_class' which contains the LDAP attribute name for objectClass.
-- All LDAP strutural and auxilliary objectClasses are supported. All LDAP attributes are supported.
+- Requires a field named 'key' which contains the physical attribute name of the Relative Distinquished Name (RDN) of the LDAP node.
+- Requires a field named 'object_class' which contains the LDAP attribute name for objectClass.
+- All LDAP structural and auxilliary objectClasses are supported.
 
 #### YAML Entity File
 
-A data entity file is required when using interface type #1. It contains the actual data to be processed by the APIs.
+Required when using interface type #1. It contains the actual data to be processed by the APIs.
 LDAP semantics and syntaxes must be followed. Errors in LDAP are returned as checked Exceptions from the APIs.
 
 ```
@@ -216,7 +215,7 @@ description:
   - another test
 ```
 
-Deletes and reads have a key defined which contains the RDN of the node. Searches require a filter.
+Deletes and reads have a key defined which contain the node's Relative Distinguised Name (RDN). Searches require a filter.
 
 ```
 # delete/read/search sample
@@ -226,12 +225,13 @@ filter: *
 
 #### Entity Declarations
 
-All LEM entities must be declared in its config.properties file. 
-These contain the fully qualified class name of the entity on the left side and its LDAP coordinates on the right.
+In the config.properties file are declarations that have the fully qualified class name on the left and its LDAP base DN (address) on the right.
 
 ```
 # config.properties
 ...
+# Users in ou=People, ...
 org.apache.directory.lem.User=ou=people,dc=example,dc=com
+# Groups in ou=Groups, ...
 org.apache.directory.lem.Group=ou=groups,dc=example,dc=com
 ```
