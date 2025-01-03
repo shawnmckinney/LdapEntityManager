@@ -196,6 +196,10 @@ class EntityMapper
                                 map.put( modelAttrName, entityAttrValue );
                             }                            
                         }
+                        else
+                        {
+                            map.put( modelAttrName, "" );                            
+                        }                        
                     }
                 }
             }
