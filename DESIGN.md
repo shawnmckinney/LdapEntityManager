@@ -74,6 +74,62 @@ Because of this, its interface should not change.
  
 This is the advantage of LEM. Adapting to a variety of complex mappings without modifying the DAO module code.
 
+### Entity Mapper
+Uses Apache Commons Collections for storing LDAP attributes as name, value pairs inside a map. The values may be single or multivalued.
+The map is keyed by the LDAP attr name and its value is an ArrayList of Strings. The LDAP API will set the proper attribute types in the database per schema requirements.
+The mapper is used internally for entity conversions from logical to physical names as required by the DAO module APIs.
+
+Sample LEM record:
+
+```
+# Objects at runtime in debugger (after call to unloadMap).
+# 1. Logical: org.apache.directory.lem.Group.java
+    data = (Group)	
+    name = (String) "foo3"	
+    description = (String) "foo"	
+    key = (String) "foo3"	
+    id = (String) "987654321"	
+    members = (ArrayList) "size = 4"	
+        [0] = (String) "uid=foo26,ou=People,dc=example,dc=com"	
+        [1] = (String) "uid=foo27,ou=People,dc=example,dc=com"	
+        [2] = (String) "uid=foo28,ou=People,dc=example,dc=com"	
+        [3] = (String) "uid=foo29,ou=People,dc=example,dc=com"	
+    object_class = (ArrayList) "size = 2"	
+        [0] = (String) "groupofmembers"	
+        [1] = (String) "posixgroup"	
+    
+# 2. Physical: org.apache.commons.collections4.multimap.ArrayListValuedHashMap
+    map = (HashMap) size = 6
+    [0] = (HashMap$Node) "member => [uid=foo26,ou=People,dc=example,dc=com, uid=foo27,ou=People,dc=example,dc=com, uid=foo28,ou=People,dc=example,dc=com, uid=foo29,ou=People,dc=example,dc=com]"
+        key = (String) "member"	
+        value = (ArrayList) "size = 4"
+        [0] = (String) "uid=foo26,ou=People,dc=example,dc=com"	
+        [1] = (String) "uid=foo27,ou=People,dc=example,dc=com"	
+        [2] = (String) "uid=foo28,ou=People,dc=example,dc=com"	
+        [3] = (String) "uid=foo29,ou=People,dc=example,dc=com"	
+    [1] = (HashMap$Node) "objectClass => [groupofmembers, posixgroup]"
+        key = (String) "objectClass"
+        value = (ArrayList) "size = 2"
+            [0] = (String) "groupofmembers"
+            [1] = (String) "posixgroup"
+    [2] = (HashMap$Node) "description => [foo]"	
+        key = (String) "description"	
+        value = (ArrayList) "size = 1"	
+    [3] = (HashMap$Node) "dn => [cn=foo3,ou=groups,dc=example,dc=com]"	
+        key = (String) "dn"	
+        value = (ArrayList) "size = 1"
+            [0] = (String) "cn=foo3,ou=groups,dc=example,dc=com"		
+    [4] = (HashMap$Node) "cn => [foo3]"	
+        key = (String) "cn"	
+        value = (ArrayList) "size = 1"	
+            [0] = (String) "foo3"	
+    [5] = (HashMap$Node) "gidNumber => [987654321]"	
+        key = (String) "gidNumber"	
+        value = (ArrayList) "size = 1"	
+            [0] = (String) "987654321"
+```
+
+
 ### Tests
 Test cases in EntityTest.java under the test/java folder.
 

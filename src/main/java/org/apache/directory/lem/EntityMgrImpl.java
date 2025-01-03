@@ -38,7 +38,6 @@ public class EntityMgrImpl implements EntityMgr
     private static final Logger LOG = LoggerFactory.getLogger( CLS_NM );
     
     /**
-     * WIP
      * @param modelFile
      * @param dataFile
      * @param className
@@ -52,21 +51,21 @@ public class EntityMgrImpl implements EntityMgr
     public void add( Entity model, Entity data ) throws LemException
     {
         EntityDao eDao = new EntityDao();            
-        MultiValuedMap map = EntityMapper.loadEntityMap( model, data );            
+        MultiValuedMap map = EntityMapper.loadMap( model, data, false );
         eDao.create(map);
     }
             
     public void update( Entity model, Entity data ) throws LemException
     {
         EntityDao eDao = new EntityDao();            
-        MultiValuedMap map = EntityMapper.loadEntityMap( model, data );            
+        MultiValuedMap map = EntityMapper.loadMap( model, data, false );
         eDao.mod(map);
     }
             
     public void delete( Entity model, Entity data ) throws LemException
     {
         EntityDao eDao = new EntityDao();            
-        MultiValuedMap map = EntityMapper.loadEntityMap( model, data );            
+        MultiValuedMap map = EntityMapper.loadMap( model, data, false );        
         eDao.remove(map);
     }
             
@@ -78,7 +77,7 @@ public class EntityMgrImpl implements EntityMgr
     public Entity read( Entity model, Entity data ) throws LemException
     {
         EntityDao eDao = new EntityDao();            
-        MultiValuedMap inMap = EntityMapper.loadModelMap( model, data );
+        MultiValuedMap inMap = EntityMapper.loadMap( model, data, true );
         MultiValuedMap outMap = eDao.get(inMap);
         Entity entity = instantiate ( model );
         EntityMapper.unloadMap(model, entity, outMap);
@@ -89,12 +88,12 @@ public class EntityMgrImpl implements EntityMgr
     {
         List<Entity> entities = null;
         EntityDao eDao = new EntityDao();            
-        MultiValuedMap map = EntityMapper.loadModelMap( model, data );
-        List<MultiValuedMap> out = eDao.find( Config.getString( model.getClass().getTypeName() ), map );
-        if ( out != null && !out.isEmpty() )
+        MultiValuedMap inMap = EntityMapper.loadMap( model, data, true );
+        List<MultiValuedMap> outMap = eDao.find( Config.getString( model.getClass().getTypeName() ), inMap );
+        if ( outMap != null && !outMap.isEmpty() )
         {
             entities = new ArrayList<>();
-            for ( MultiValuedMap item : out )
+            for ( MultiValuedMap item : outMap )
             {
                 Entity entity = instantiate ( model );
                 EntityMapper.unloadMap(model, entity, item);
