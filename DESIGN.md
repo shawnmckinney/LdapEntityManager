@@ -1,6 +1,6 @@
 # Overview
 
-LDAP Entity Manager (LEM) reads and writes records from an LDAP database. It uses LDAPv3 protocol to Create Read Update Delete (CRUD).
+LDAP Entity Manager (LEM) reads and writes from LDAP. It uses its protocol to Create Read Update Delete (CRUD) and search.
 The mappings between the backend database and the entities are defined in Yet Another Markup Language (YAML) format and Java classes.
 
 ## YAML model, entitity data and API
@@ -11,14 +11,15 @@ The mappings between the backend database and the entities are defined in Yet An
 There are two input files. The first, entity model, defines the mappings between the logical and physical format. 
 The second, entity data, contains the actual data using the logical format defined in the model.
 
-- LEM uses Apache Directory LDAP API for data access. 
-- Apache Commons Configuration is used for LDAP coordinates and stored in the config.properties file as name:value pairs.
-- Apache Log4j2 for logging and its config in log4j2.xml.
-- The data model and entity files are in test/conf folder.
+LEM Uses Java and
+- Apache Directory LDAP API for user data access.
+- Apache Commons Configuration for user property storage.
+- Apache Log4j2 for logging utility.
+- Sample data model, entity files and config under test/conf.
 
 ## Design
 
-LEM APIs are defined in the EntityMgr.java interface and have two usage options:
+LEM APIs are defined in the EntityMgr interface. There are two usage options:
 
 1. Passing YAML files as args
     - add( String modelFile, String dataFile, String className )
@@ -134,8 +135,7 @@ Sample LEM record:
 Test cases in EntityTest.java under the test/java folder.
 
 ### Usage
-
-Some guidelines for follow (Work In Progress)
+(Work In Progress)
 
 #### Java Class
 
