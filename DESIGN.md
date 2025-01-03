@@ -2,13 +2,15 @@
 
 LDAP Entity Manager (LEM) reads and writes records from an LDAP database. It uses LDAPv3 protocol to Create Read Update Delete (CRUD).
 The mappings between the backend database and the entities are defined in Yet Another Markup Language (YAML) format and Java classes.
-There are two input files to the APIs. The first, the entity's model, defines the mappings between the logical and physical format. 
-The second, the entity's data, contains the actual data using the logical format defined in the model.
 
 ## YAML model, entitity data and API
     - [see](./PROPOSAL.md)
 
 ## Details
+
+There are two input files. The first, entity model, defines the mappings between the logical and physical format. 
+The second, entity data, contains the actual data using the logical format defined in the model.
+
 - LEM uses Apache Directory LDAP API for data access. 
 - Apache Commons Configuration is used for LDAP coordinates and stored in the config.properties file as name:value pairs.
 - Apache Log4j2 for logging and its config in log4j2.xml.
@@ -28,25 +30,25 @@ LEM APIs are defined in the EntityMgr.java interface and have two usage options:
 - #2 accepts Java objects as arguments.
 - Both are functionally equivilent.
 
-## Operations:
+## Operations Supported
 
 1. Create, Update or Delete
 + Input: 2 YAML files; model x, entity y 
-+ process input data:
---> Unmarshal(x, y) -> Objects(x, y) 
---> Reflection(x, y) -> Map(key, list<A>) 
---> DAO (MAP) -> ldap op(attrs)
++ process flow:
+--> Unmarshal YAML -> Java Objects
+--> Java Reflection -> Map
+--> DAO (Map) -> load LDAP (entry)
 
 2. Read or Search 
 + Input: 1 YAML files; model x, 1 key 
 + process input data:
---> Unmarshal(x, y) -> Objects(x) 
---> Reflection(x) -> Map(key, list<A>) 
---> DAO (MAP) -> ldap op(attrs)
+--> Unmarshal YAML -> Java Objects 
+--> Reflection Java Objects -> Map
+--> DAO (Map) -> search LDAP (dn, filter)
 + process output data:
---> unload (entry) -> Map(key, list) 
---> Reflection (Map) -> Objects(x, y) 
---> Marshal (x, y) -> YAML files x,y
+--> unload LDAP (entries) -> Map
+--> Java Reflection Map -> Java Objects
+--> Marshal Java Objects -> YAML
 
 ### Unmarshal
 Takes the two YAML files as input and using Jackson converts into Java objects.
@@ -54,29 +56,30 @@ Takes the two YAML files as input and using Jackson converts into Java objects.
 ### Java Reflection
 Converts the objects into a map of multi-values.
 
-### DAO
-Load the name/value pairs from the Map into LDAP attributes and perform the LDAP operation.
+### DAO Module
 
-Contained in the dao package. It's comprised of the following:
-- BaseDao.java: boilerplate functionality for interacting with the LDAP data layer.
-- ConnectionProvider.java: a connection pool implementation.
-- ResourceUtil.java utilities for processing needed by the DAO functions.
-- TrustStoreManager.java used during LDAPS and TLS connections.
-- EntityDao.java functions to read, write and search the LDAP entities.
+These classes handle processing between the interface and backend database resource.
 
-Of these, the EntityDao's design is novel. It depends on the caller passing the input data
-in maps containing a dictionary of attribute names and their associated values. 
-It's expected that this code will have to change as it matures to handle more complex use cases. 
-Eventually, if the design's successful, it'll stabilize.
+| Java Classname     | has the following function                   |
+|--------------------|----------------------------------------------|
+| BaseDao            | Apache LDAP API wrapper                      |
+| ConnectionProvider | LDAP connection pool processing              |
+| ResourceUtil       | Perform Jackson Data Binding ops             |
+| TrustStoreManager  | Used in LDAPS/TLS connections                |
+| EntityDao          | Create, Read, Update, Delete, Search LDAP    |
 
-This is the advantage of LEM over other LDAP CRUD APIs. Adapting to a variety of complex mappings without code changes.
+The EntityDao design prescribes passing data objects in and out as a Multimap.
+The map contains the list of attribute names and their associated values.
+Because of this, its interface should not change.
+ 
+This is the advantage of LEM. Adapting to a variety of complex mappings without modifying the DAO module code.
 
 ### Tests
 Test cases in EntityTest.java under the test/java folder.
 
 ### Usage
 
-Some guidelines for usage follow (Work In Progress)
+Some guidelines for follow (Work In Progress)
 
 #### Java Class
 
