@@ -140,7 +140,7 @@ Test cases in EntityTest.java under the test/java folder.
 
 #### Java Class
 
-The Jackson requires a Java class for target of data binding operations.
+Jackson requires a Java class for target of data binding operations.
 
 The Java class ...
 - contains the target data mappings where the logical and physical element names are stored.
@@ -215,12 +215,12 @@ description:
   - another test
 ```
 
-Deletes and reads have a key defined which contain the node's Relative Distinguised Name (RDN). Searches require a filter.
+Deletes and reads have a 'key' to contain node's RDN. Searches require a 'filter'.
 
 ```
 # delete/read/search sample
 key: acme1
-filter: *
+filter: (uid=foo*)
 ```
 
 #### Entity Declarations

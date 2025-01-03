@@ -75,7 +75,8 @@ public class EntityDao extends BaseDao
             }           
             String[] atrs = attrs.toArray(new String[0]);
             ld = getConnection();            
-            entry = read( ld, nodeDn, atrs );
+            //entry = read( ld, nodeDn, atrs );
+            entry = read( ld, nodeDn, new String[]{"*"} );
             if (entry == null)
             {
                 throw new LemException( "Entry DN [" + nodeDn + "] not found" );
@@ -116,11 +117,6 @@ public class EntityDao extends BaseDao
                     {
                         filter = value;
                     }
-/*                    else if( ! key.toString().equalsIgnoreCase("DN"))
-                    {
-                        attrs.add( key );
-                    }
-*/                    
                     else
                     {
                         attrs.add( key );
@@ -128,12 +124,9 @@ public class EntityDao extends BaseDao
                 }                
             }           
             String[] atrs = attrs.toArray(new String[0]);
-            StringBuilder filterbuf = new StringBuilder();
-            filterbuf.append( "(" );
-            filterbuf.append( filter );
-            filterbuf.append( ")" );                                               
             ld = getConnection();            
-            try ( SearchCursor searchResults = search( ld, rootDn, SearchScope.ONELEVEL, filterbuf.toString(), new String[]{"*"}, false ) )
+            //try ( SearchCursor searchResults = search( ld, rootDn, SearchScope.ONELEVEL, filter, atrs, false ) )
+            try ( SearchCursor searchResults = search( ld, rootDn, SearchScope.ONELEVEL, filter, new String[]{"*"}, false ) )
             {
                 long sequence = 0;
                 while ( searchResults.next() )
