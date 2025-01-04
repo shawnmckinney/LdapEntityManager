@@ -191,6 +191,7 @@ class EntityMapper
                                 LOG.debug("NODE DN: {}", nodeDn );
                                 map.put( "dn", nodeDn );                                
                             }
+                            //else if ( name.compareToIgnoreCase("filter") == 0 )?
                             else
                             {
                                 map.put( modelAttrName, entityAttrValue );

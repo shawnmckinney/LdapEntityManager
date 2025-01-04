@@ -106,6 +106,7 @@ public class EntityDao extends BaseDao
         String filter = null;
         try
         {
+            /* get search filter and attr list: */
             List<String> attrs = new ArrayList<String>();
             for (String key : entryMap.keySet())
             {
@@ -124,17 +125,16 @@ public class EntityDao extends BaseDao
                 }                
             }           
             String[] atrs = attrs.toArray(new String[0]);
+            
             ld = getConnection();            
-            //try ( SearchCursor searchResults = search( ld, rootDn, SearchScope.ONELEVEL, filter, atrs, false ) )
-            try ( SearchCursor searchResults = search( ld, rootDn, SearchScope.ONELEVEL, filter, new String[]{"*"}, false ) )
+            try ( SearchCursor searchResults = search( ld, rootDn, SearchScope.ONELEVEL, filter, atrs, false ) )
+            //try ( SearchCursor searchResults = search( ld, rootDn, SearchScope.ONELEVEL, filter, new String[]{"*"}, false ) )
             {
                 long sequence = 0;
                 while ( searchResults.next() )
                 {
                     MultiValuedMap <String, List> entity = unloadLdapEntry( searchResults.getEntry(), entryMap );
                     out.add( entity );
-                    //out.add( unloadLdapEntry( searchResults.getEntry(), entryMap ));
-                    //out.add( unloadLdapEntry( searchResults.getEntry(), atrs ));
                 }
             }
             catch ( IOException e )
@@ -187,8 +187,7 @@ public class EntityDao extends BaseDao
             }
         }        
         return map;
-    }
-    
+    }    
 
     private MultiValuedMap <String, List> unloadLdapEntry( Entry le, String[] atrs  )
         throws LdapInvalidAttributeValueException
@@ -211,13 +210,12 @@ public class EntityDao extends BaseDao
     public void create( MultiValuedMap <String, List>entryMap ) throws LemException
     {
         LdapConnection ld = null;
-        //String nodeDn = null;
         Entry entry = new DefaultEntry();
         try
         {
             for (String key : entryMap.keySet())
             {
-                LOG.debug( "key [{}], value: [{}]", key, entryMap.get( key ) );
+                LOG.debug( "key [{}], value: [{}]", key, entryMap.get( key ) );                
                 List<String> vals = (List)entryMap.get( key );
                 for ( String value : vals )
                 {
@@ -225,7 +223,7 @@ public class EntityDao extends BaseDao
                     {
                         entry.setDn( value );
                     }
-                    else
+                    else if( ! key.toString().equalsIgnoreCase("filter") && ( ! value.isEmpty() ) )
                     {
                         entry.add( key.toString(), value );                        
                     }
@@ -250,7 +248,6 @@ public class EntityDao extends BaseDao
     {
         LdapConnection ld = null;
         String nodeDn = null;
-        Entry entry = new DefaultEntry();
         List<Modification> mods = new ArrayList<Modification>();
         try
         {
@@ -264,10 +261,10 @@ public class EntityDao extends BaseDao
                     {
                         nodeDn = value;
                     }
-                    else
+                    else if(!key.toString().equalsIgnoreCase("filter") && ( ! value.isEmpty() ) )
                     {
                         mods.add( new DefaultModification( ModificationOperation.REPLACE_ATTRIBUTE, key.toString(), value ) );
-                        //mods.add( new DefaultModification( ModificationOperation.ADD_ATTRIBUTE, key.toString(), value ) );
+                        //mods.add( new DefaultModification( ModificationOperation.ADD_ATTRIBUTE, key.toString(), value ) );                            
                     }
                 }
             }            

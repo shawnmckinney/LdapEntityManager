@@ -2,9 +2,9 @@
 
 ## Overview
 
-Use LDAP protocol to Create Read Update Delete (CRUD) and search records in the directory.
-Process data in Yet Another Markup Language (YAML) files and Java objects.
-Pass data internally with map of multi-values. No hardcoded mappings encoded in the data access layer.
+Use LDAP protocol to Create Read Update Delete (CRUD) and search records in the directory database.
+External data interface uses Yet Another Markup Language (YAML) files and/or Java objects.
+Multi-value maps for internal processing abstracts the details of the data model from the data access layer.
 
 ## Data Model and API
     - [see](./PROPOSAL.md)
@@ -130,7 +130,6 @@ Sample LEM record:
         value = (ArrayList) "size = 1"	
             [0] = (String) "987654321"
 ```
-
 
 ### Tests
 Test cases in EntityTest.java under the test/java folder.
