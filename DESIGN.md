@@ -3,7 +3,7 @@
 ## Overview
 
 Use LDAP protocol to Create Read Update Delete (CRUD) and search records in the directory database.
-External data interface uses Yet Another Markup Language (YAML) files and/or Java objects.
+External data interface uses Yet Another Markup Language (YAML) files and/or Java objects to process arbitrary data models.
 Multi-value maps for internal processing abstracts the details of the data model from the data access layer.
 
 ## Data Model and API
