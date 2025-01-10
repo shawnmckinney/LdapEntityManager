@@ -32,7 +32,7 @@ Defined in the EntityMgr interface. Two options for usage:
 2. Pass Java objects as args
     - do( Entity model, Entity data )
 
-- Both are functionally equivilent.
+- Both are functionally equivalent.
 
 ### Iterface Description
 

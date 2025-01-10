@@ -1,0 +1,4 @@
+key: foo32
+# inetorgperson:  
+name: foo32
+filter: (uid=foo32*)
