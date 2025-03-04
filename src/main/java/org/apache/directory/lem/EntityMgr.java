@@ -25,16 +25,16 @@ import java.util.List;
  *
  * @author smckinn
  */
-public interface EntityMgr 
+public interface EntityMgr
 {
-    void add( String modelFile, String dataFile, String className ) throws LemException;
-    void update( String modelFile, String dataFile, String className ) throws LemException;
-    void delete( String modelFile, String dataFile, String className ) throws LemException;
-    Entity read( String modelFile, String dataFile, String className ) throws LemException;
-    List<Entity> find( String modelFile, String dataFile, String className ) throws LemException;    
-    void add( Entity model, Entity data ) throws LemException;
-    void update( Entity model, Entity data ) throws LemException;
-    void delete( Entity model, Entity data ) throws LemException;
-    Entity read( Entity model, Entity data ) throws LemException;
-    List<Entity> find( Entity model, Entity data ) throws LemException;    
+	void add(String modelFile, String dataFile, String className) throws LemException;
+	void update(String modelFile, String dataFile, String className) throws LemException;
+	void delete(String modelFile, String dataFile, String className) throws LemException;
+	Entity read(String modelFile, String dataFile, String className) throws LemException;
+	List<Entity> find(String modelFile, String dataFile, String className) throws LemException;
+	void add(Entity model, Entity data) throws LemException;
+	void update(Entity model, Entity data) throws LemException;
+	void delete(Entity model, Entity data) throws LemException;
+	Entity read(Entity model, Entity data) throws LemException;
+	List<Entity> find(Entity model, Entity data) throws LemException;
 }

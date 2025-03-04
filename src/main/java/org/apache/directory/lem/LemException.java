@@ -19,24 +19,25 @@
  */
 package org.apache.directory.lem;
 
-
 /**
- * 
+ *
  * @author smckinn
  */
 public class LemException extends Exception
 {
-    /** Default serialVersionUID */
-    private static final long serialVersionUID = 1L;
 
-    public LemException( String msg )
-    {
-        super( msg );
-    }
+	/**
+	 * Default serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
 
+	public LemException(String msg)
+	{
+		super(msg);
+	}
 
-    public LemException( String msg, Exception previousException )
-    {
-        super( msg, previousException );
-    }
+	public LemException(String msg, Exception previousException)
+	{
+		super(msg, previousException);
+	}
 }

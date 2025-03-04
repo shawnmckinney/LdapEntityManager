@@ -20,20 +20,20 @@
 package org.apache.directory.lem;
 
 /**
- * 
+ *
  * @author smckinn
  */
 public class Ids
 {
-    public static final String CONNECTIONS_MAX = "max";    
-    public static final String TLS = "tls";
-    public static final String LDAPS = "ldaps";
-    public static final String BINDDN = "binddn";
-    public static final String BINDPW = "bindpw";
-    public static final String HOST = "host";
-    public static final String PORT = "port";
-    public static final String TLS_CACERT = "cacert";
-    public static final String TRUST_STORE_PW = "trust.store.pw";
-    public static final String TRUST_STORE = "trust.store";
-    public static final String TRUST_STORE_ON_CLASSPATH = "trust.store.classpath";
+	public static final String CONNECTIONS_MAX = "max";
+	public static final String TLS = "tls";
+	public static final String LDAPS = "ldaps";
+	public static final String BINDDN = "binddn";
+	public static final String BINDPW = "bindpw";
+	public static final String HOST = "host";
+	public static final String PORT = "port";
+	public static final String TLS_CACERT = "cacert";
+	public static final String TRUST_STORE_PW = "trust.store.pw";
+	public static final String TRUST_STORE = "trust.store";
+	public static final String TRUST_STORE_ON_CLASSPATH = "trust.store.classpath";
 }
