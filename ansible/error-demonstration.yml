@@ -1,0 +1,61 @@
+---
+# This playbook demonstrates the WRONG way to use loops
+# IT WILL FAIL on purpose to show the exact error from the problem statement
+# DO NOT USE THIS IN PRODUCTION
+
+- name: Demonstration of incorrect loop usage (WILL FAIL)
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: Warning message
+      debug:
+        msg: |
+          ⚠️  WARNING ⚠️
+          The next task will FAIL with the exact error from the problem statement.
+          This is intentional to demonstrate the issue.
+          
+          Error you will see:
+          "Invalid data passed to 'loop', it requires a list, got this instead: 1,2,3,4,5,..."
+
+    # This task will fail with the exact error mentioned in the problem statement
+    - name: Add users to test zones (WRONG - will fail with loop error)
+      debug:
+        msg: "Attempting to process user {{ item }}"
+      loop: "{{ lookup('sequence', 'start=1 end=100') }}"  # ❌ Missing wantlist=True!
+      ignore_errors: yes
+      register: failed_result
+
+    - name: Explanation of the error
+      debug:
+        msg: |
+          ============================================
+          Error Explanation
+          ============================================
+          
+          The task failed because lookup('sequence', ...) returns a COMMA-SEPARATED STRING:
+          "1,2,3,4,5,6,7,8,9,10,...,99,100"
+          
+          But the 'loop' directive expects a LIST:
+          [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ..., 99, 100]
+          
+          SOLUTIONS:
+          
+          1. Use query() instead of lookup():
+             loop: "{{ query('sequence', 'start=1 end=100') }}"
+          
+          2. Add wantlist=True to lookup():
+             loop: "{{ lookup('sequence', 'start=1 end=100', wantlist=True) }}"
+          
+          3. Use range() with list filter:
+             loop: "{{ range(1, 101) | list }}"
+          
+          See TROUBLESHOOTING.md for more details.
+          See quick-test.yml for working examples.
+
+# Usage:
+#   ansible-playbook ansible/error-demonstration.yml
+#
+# Note: This playbook is for educational purposes only to demonstrate
+# the error from the problem statement and its solutions.
