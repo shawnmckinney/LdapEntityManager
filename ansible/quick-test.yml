@@ -1,0 +1,75 @@
+---
+# Quick test playbook to verify loop syntax
+# This demonstrates the correct loop patterns without the full role complexity
+
+- name: Quick test - Verify loop syntax
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: Show what we're about to do
+      debug:
+        msg: "Testing loop patterns to add users 1 through 10"
+
+    # ========================================================================
+    # METHOD 1: range() with list filter (RECOMMENDED)
+    # ========================================================================
+    - name: Test loop using range with list filter (CORRECT ✅)
+      debug:
+        msg: "Would create user {{ item }} using range() | list"
+      loop: "{{ range(1, 11) | list }}"
+      tags: ['test', 'range']
+
+    # ========================================================================
+    # METHOD 2: query() with sequence (RECOMMENDED)
+    # ========================================================================
+    - name: Test loop using query with sequence (CORRECT ✅)
+      debug:
+        msg: "Would create user {{ item }} using query()"
+      loop: "{{ query('sequence', 'start=1 end=10') }}"
+      tags: ['test', 'query']
+
+    # ========================================================================
+    # METHOD 3: lookup() with wantlist=True (CORRECT)
+    # ========================================================================
+    - name: Test loop using lookup with wantlist=True (CORRECT ✅)
+      debug:
+        msg: "Would create user {{ item }} using lookup() with wantlist=True"
+      loop: "{{ lookup('sequence', 'start=1 end=10', wantlist=True) }}"
+      tags: ['test', 'lookup']
+
+    # ========================================================================
+    # WRONG EXAMPLES (commented out to prevent errors)
+    # ========================================================================
+
+    # ❌ This will FAIL with "Invalid data passed to 'loop'"
+    # - name: Test loop using lookup WITHOUT wantlist (WRONG ❌)
+    #   debug:
+    #     msg: "Would create user {{ item }}"
+    #   loop: "{{ lookup('sequence', 'start=1 end=10') }}"
+    #   tags: ['test', 'wrong']
+
+    - name: Summary
+      debug:
+        msg: |
+          ============================================
+          Loop Test Complete! 
+          ============================================
+          
+          All three correct methods were demonstrated:
+          1. range() with list filter
+          2. query() with sequence
+          3. lookup() with wantlist=True
+          
+          To add actual users, use: add-test-users.yml
+          For troubleshooting, see: TROUBLESHOOTING.md
+
+# Usage:
+#   # Test all methods:
+#   ansible-playbook quick-test.yml
+#
+#   # Test specific method:
+#   ansible-playbook quick-test.yml --tags range
+#   ansible-playbook quick-test.yml --tags query
+#   ansible-playbook quick-test.yml --tags lookup

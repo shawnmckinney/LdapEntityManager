@@ -1,0 +1,54 @@
+---
+# Task to add a single user to LDAP
+# This task is designed to be called in a loop
+
+- name: Set user facts
+  set_fact:
+    current_user_name: "{{ test_user_prefix }}{{ user_id }}"
+    current_user_uid: "{{ test_user_uid_base | int + user_id | int }}"
+    current_user_gid: "{{ test_user_gid_base | int + user_id | int }}"
+    current_user_home: "{{ test_user_home_prefix }}/{{ test_user_prefix }}{{ user_id }}"
+
+- name: Create temporary directory for user entity files
+  tempfile:
+    state: directory
+    suffix: lem
+  register: temp_dir
+
+- name: Generate user model file
+  template:
+    src: user-model.yml.j2
+    dest: "{{ temp_dir.path }}/user-model.yml"
+    mode: '0644'
+
+- name: Generate user entity file
+  template:
+    src: user.yml.j2
+    dest: "{{ temp_dir.path }}/user-{{ user_id }}.yml"
+    mode: '0644'
+
+- name: Generate config.properties file
+  template:
+    src: config.properties.j2
+    dest: "{{ temp_dir.path }}/config.properties"
+    mode: '0644'
+
+- name: Add user to LDAP using LEM
+  shell: |
+    java -cp "{{ lem_jar_path }}" org.apache.directory.lem.EntityTest \
+      "{{ temp_dir.path }}/user-model.yml" \
+      "{{ temp_dir.path }}/user-{{ user_id }}.yml" \
+      "{{ user_class }}"
+  environment:
+    LEM_CONFIG: "{{ temp_dir.path }}/config.properties"
+  register: add_user_result
+  failed_when: false
+
+- name: Display result
+  debug:
+    msg: "User {{ current_user_name }} (ID: {{ user_id }}): {{ 'Added successfully' if add_user_result.rc == 0 else 'Failed - may already exist' }}"
+
+- name: Clean up temporary files
+  file:
+    path: "{{ temp_dir.path }}"
+    state: absent

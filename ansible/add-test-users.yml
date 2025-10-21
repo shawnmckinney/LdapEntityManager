@@ -1,0 +1,87 @@
+---
+# Playbook to add test users to LDAP
+# This demonstrates the CORRECT way to loop over a sequence in Ansible
+
+- name: Add test users to LDAP using LEM
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+    - name: Display information about the loop
+      debug:
+        msg: "This playbook will add 100 test users using a proper list loop"
+
+    # ========================================================================
+    # CORRECT METHODS FOR LOOPING
+    # ========================================================================
+
+    # Method 1: Using range() with list filter (RECOMMENDED)
+    # This is the most straightforward and readable approach
+    - name: Add users to test zones (Method 1 - range with list filter)
+      include_role:
+        name: openldap
+        tasks_from: add-user
+      loop: "{{ range(1, 101) | list }}"
+      loop_control:
+        loop_var: user_id
+      when: use_method == "range" or use_method is not defined
+
+    # Method 2: Using query() with sequence lookup (ALTERNATIVE)
+    # This is the Ansible-native way and always returns a list
+    # - name: Add users to test zones (Method 2 - query with sequence)
+    #   include_role:
+    #     name: openldap
+    #     tasks_from: add-user
+    #   loop: "{{ query('sequence', 'start=1 end=100') }}"
+    #   loop_control:
+    #     loop_var: user_id
+    #   when: use_method == "query"
+
+    # Method 3: Using lookup() with wantlist=True (ALTERNATIVE)
+    # This is useful when you need to use lookup() for other reasons
+    # - name: Add users to test zones (Method 3 - lookup with wantlist)
+    #   include_role:
+    #     name: openldap
+    #     tasks_from: add-user
+    #   loop: "{{ lookup('sequence', 'start=1 end=100', wantlist=True) }}"
+    #   loop_control:
+    #     loop_var: user_id
+    #   when: use_method == "lookup"
+
+    # ========================================================================
+    # COMMON MISTAKES TO AVOID
+    # ========================================================================
+
+    # ❌ WRONG - This returns a string, not a list!
+    # - name: Add users to test zones (WRONG - will fail)
+    #   include_role:
+    #     name: openldap
+    #     tasks_from: add-user
+    #   loop: "{{ lookup('sequence', 'start=1 end=100') }}"  # Missing wantlist=True!
+    #   loop_control:
+    #     loop_var: user_id
+
+    # ❌ WRONG - range() without list filter may not work correctly
+    # - name: Add users to test zones (WRONG - may fail)
+    #   include_role:
+    #     name: openldap
+    #     tasks_from: add-user
+    #   loop: "{{ range(1, 101) }}"  # Missing | list filter!
+    #   loop_control:
+    #     loop_var: user_id
+
+    - name: Display completion message
+      debug:
+        msg: "Successfully processed all test users"
+
+# Usage:
+#   ansible-playbook -i inventory/hosts add-test-users.yml
+#
+# To use a specific method:
+#   ansible-playbook -i inventory/hosts add-test-users.yml -e "use_method=range"
+#   ansible-playbook -i inventory/hosts add-test-users.yml -e "use_method=query"
+#   ansible-playbook -i inventory/hosts add-test-users.yml -e "use_method=lookup"
+#
+# To add a smaller number of users for testing:
+#   ansible-playbook -i inventory/hosts add-test-users.yml -e "test_user_count=10"

@@ -6,6 +6,7 @@ CRUD and search APIs with flexible data mapping using YAML.
 
 - [Proposal](./PROPOSAL.md)
 - [Design](./DESIGN.md)
+- [Ansible Integration](./ansible/README.md) - Examples and best practices for using with Ansible
 
 ## Prereqs
 
@@ -40,3 +41,26 @@ mvn clean install
 ## Define Data Model
 
 ## Test
+
+## Ansible Integration
+
+This project includes Ansible playbooks and roles for automating LDAP entity management. See the [Ansible documentation](./ansible/README.md) for:
+
+- Example playbooks for adding test users
+- Troubleshooting guide for common loop-related errors
+- Best practices for using Ansible with LDAP Entity Manager
+
+**Quick Start with Ansible:**
+
+```bash
+# Build the project first
+mvn clean install
+
+# Run the quick test to verify loop syntax
+ansible-playbook ansible/quick-test.yml
+
+# Add 100 test users (example)
+ansible-playbook ansible/add-test-users.yml
+```
+
+**Important**: If you encounter the error "Invalid data passed to 'loop'", see [ansible/TROUBLESHOOTING.md](./ansible/TROUBLESHOOTING.md) for solutions.

@@ -1,0 +1,12 @@
+binddn={{ ldap_bind_dn }}
+bindpw={{ ldap_bind_pw }}
+host={{ ldap_host }}
+port={{ ldap_port }}
+max=10
+tls={{ ldap_tls | lower }}
+ldaps={{ ldap_ldaps | lower }}
+trust.store=truststore.jks
+trust.store.pw=changeit
+trust.store.classpath=true
+{{ user_class }}={{ ldap_people_base }}
+{{ group_class }}={{ ldap_groups_base }}

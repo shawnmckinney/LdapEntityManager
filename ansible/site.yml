@@ -1,0 +1,26 @@
+---
+# Main site playbook for LDAP Entity Manager operations
+
+- name: Manage LDAP entities
+  hosts: localhost
+  connection: local
+  gather_facts: yes
+
+  roles:
+    - role: openldap
+      tags: ['ldap', 'openldap']
+
+  tasks:
+    - name: Display welcome message
+      debug:
+        msg: |
+          LDAP Entity Manager - Ansible Integration
+          =========================================
+          
+          This playbook provides a foundation for managing LDAP entities.
+          
+          Available playbooks:
+            - add-test-users.yml    : Add multiple test users to LDAP
+          
+          See ansible/README.md for more information.
+      tags: always

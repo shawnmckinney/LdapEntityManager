@@ -1,0 +1,26 @@
+---
+# Main tasks for OpenLDAP role
+
+- name: Ensure LEM configuration directory exists
+  file:
+    path: "{{ lem_conf_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Verify LEM JAR exists
+  stat:
+    path: "{{ lem_jar_path }}"
+  register: lem_jar_stat
+
+- name: Fail if LEM JAR not found
+  fail:
+    msg: "LEM JAR not found at {{ lem_jar_path }}. Please run 'mvn clean install' first."
+  when: not lem_jar_stat.stat.exists
+
+- name: Display LDAP configuration
+  debug:
+    msg:
+      - "LDAP Host: {{ ldap_host }}"
+      - "LDAP Port: {{ ldap_port }}"
+      - "LDAP People Base: {{ ldap_people_base }}"
+      - "LDAP Groups Base: {{ ldap_groups_base }}"

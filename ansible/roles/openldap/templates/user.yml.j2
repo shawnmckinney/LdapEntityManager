@@ -1,0 +1,16 @@
+key: {{ current_user_name }}
+name: {{ current_user_name }}
+full_name: {{ current_user_name | capitalize }} Test User
+last_name: User
+first_name: {{ current_user_name | capitalize }}
+password: {{ test_user_password }}
+id: {{ current_user_uid }}
+group_id: {{ current_user_gid }}
+home: {{ current_user_home }}
+login: {{ test_user_shell }}
+type: test
+description:
+  - Test user {{ user_id }} created by Ansible
+object_class:
+  - inetorgperson
+  - posixaccount

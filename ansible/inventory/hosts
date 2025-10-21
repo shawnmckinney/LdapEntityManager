@@ -1,0 +1,14 @@
+# Ansible inventory file for LDAP Entity Manager
+
+[ldap_servers]
+localhost ansible_connection=local
+
+[ldap_servers:vars]
+# Override default variables here if needed
+# ldap_host=ldap.example.com
+# ldap_port=389
+# ldap_bind_dn=cn=admin,dc=example,dc=com
+# ldap_bind_pw=secretpassword
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3

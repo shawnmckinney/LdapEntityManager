@@ -1,0 +1,31 @@
+---
+# Default variables for OpenLDAP role
+
+# LDAP connection parameters
+ldap_host: localhost
+ldap_port: 389
+ldap_bind_dn: "dc=example,dc=com"
+ldap_bind_pw: secret
+ldap_tls: false
+ldap_ldaps: false
+
+# LDAP base DNs
+ldap_people_base: "ou=people,dc=example,dc=com"
+ldap_groups_base: "ou=groups,dc=example,dc=com"
+
+# LEM (LDAP Entity Manager) paths
+lem_jar_path: "../target/lem-1.0-SNAPSHOT.jar"
+lem_conf_dir: "../src/test/conf"
+
+# Test user defaults
+test_user_prefix: "testuser"
+test_user_password: "secret123"
+test_user_shell: "/bin/bash"
+test_user_home_prefix: "/home"
+test_user_gid_base: 10000
+test_user_uid_base: 10000
+test_group_name: "testgroup"
+
+# Entity Manager Java class
+user_class: "org.apache.directory.lem.User"
+group_class: "org.apache.directory.lem.Group"
