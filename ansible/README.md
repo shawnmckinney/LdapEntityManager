@@ -81,8 +81,13 @@ See the example playbook `add-test-users.yml` which demonstrates the correct way
 ```
 ansible/
 ├── README.md                          # This file
+├── TROUBLESHOOTING.md                 # Detailed troubleshooting guide
+├── EXAMPLES.md                        # Comprehensive usage examples
+├── ansible.cfg                        # Ansible configuration
 ├── site.yml                           # Main playbook
 ├── add-test-users.yml                 # Example: Add test users
+├── quick-test.yml                     # Test loop syntax
+├── error-demonstration.yml            # Shows the wrong way (for learning)
 ├── inventory/
 │   └── hosts                          # Inventory file
 └── roles/
@@ -90,10 +95,12 @@ ansible/
         ├── defaults/
         │   └── main.yml               # Default variables
         ├── tasks/
-        │   └── main.yml               # Task definitions
+        │   ├── main.yml               # Main task definitions
+        │   └── add-user.yml           # Add user task
         └── templates/
             ├── user.yml.j2            # User entity template
-            └── user-model.yml.j2      # User model template
+            ├── user-model.yml.j2      # User model template
+            └── config.properties.j2   # LDAP config template
 ```
 
 ## Playbook Examples
@@ -151,6 +158,13 @@ Customize user attributes by modifying the templates in `roles/openldap/template
 3. **Convert `range()` output to list** using the `list` filter
 4. **Test with a small subset** before running on large ranges (e.g., test with 1-10 before 1-100)
 5. **Use `loop_control`** to customize loop variable names for better readability
+
+## More Examples
+
+For more detailed examples and use cases, see:
+- [EXAMPLES.md](EXAMPLES.md) - Comprehensive examples covering various scenarios
+- [quick-test.yml](quick-test.yml) - Simple test to verify loop syntax
+- [error-demonstration.yml](error-demonstration.yml) - Shows the incorrect pattern for educational purposes
 
 ## Additional Resources
 
